@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 
+use Str;
+use Session;
+
 class CategoryController extends Controller
 {
     /**
@@ -23,7 +26,7 @@ class CategoryController extends Controller
     
     public function index()
     {
-        $this->data['categories'] = Category::orderBy('nama', 'ASC')->paginate(10);
+        $this->data['categories'] = Category::orderBy('name', 'ASC')->paginate(10);
         return view('admin.categories.index', $this->data);
     }
 
@@ -50,7 +53,7 @@ class CategoryController extends Controller
         if (Category::create($params)) {
             Session::flash('success', 'Category has been saved');
         }
-        return redirect('admin/kategoris');
+        return redirect('admin/categories');
     }
 
     /**
@@ -73,7 +76,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $category = Category::findOrFail($category->id);
-        $categories = Category::orderBy('nama', 'asc')->get();
+        $categories = Category::orderBy('name', 'asc')->get();
 
         $this->data['categories'] = $categories;
         $this->data['category'] = $category;
@@ -95,7 +98,7 @@ class CategoryController extends Controller
             Session::flash('success', 'Category has been updated.');
         }
 
-        return redirect('admin/kategoris');
+        return redirect('admin/categories');
     }
 
     /**
@@ -110,6 +113,6 @@ class CategoryController extends Controller
             Session::flash('success', 'Category has been deleted');
         }
 
-        return redirect('admin/kategoris');
+        return redirect('admin/categories');
     }
 }
