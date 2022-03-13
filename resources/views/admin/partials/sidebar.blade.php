@@ -38,30 +38,30 @@
                         </div>
                     </ul>
                 </li>
-                <li class="has-sub {{ ($currentAdminMenu == 'produk') ? 'active expand' : ''}}">
+                <li class="has-sub {{ ($currentAdminMenu == 'product') ? 'active expand' : ''}}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#components" aria-expanded="false" aria-controls="components">
                         <i class="mdi mdi-folder-multiple-outline"></i>
                         <span class="nav-text">Produk</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ ($currentAdminMenu == 'produk') ? 'show' : ''}}" id="components"
+                    <ul class="collapse {{ ($currentAdminMenu == 'product') ? 'show' : ''}}" id="components"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ url('admin/produks/create') }}">
+                                <a class="sidenav-item-link" href="{{ url('admin/products/create') }}">
                                     <span class="nav-text">Tambah Produk</span>
                                 </a>
                             </li>
 
                             <li>
-                                <a class="sidenav-item-link" href="{{ url('admin/produks') }}">
+                                <a class="sidenav-item-link" href="{{ url('admin/products') }}">
                                     <span class="nav-text">Manage Produk</span>
                                 </a>
                             </li>
 
                             <li>
-                                <a class="sidenav-item-link" href="{{ url('admin/kategoris') }}">
+                                <a class="sidenav-item-link" href="{{ url('admin/categories') }}">
                                     <span class="nav-text">Edit Kategori</span>
                                 </a>
                             </li>
