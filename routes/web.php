@@ -26,5 +26,9 @@ Route::group(
     function () {
         Route::resource('categories', 'CategoryController');
         Route::resource('products', 'ProductController');
+        Route::get('products/{product_id}/images', 'ProductController@images');
+        Route::get('products/{product_id}/add-image', 'ProductController@add_image');
+        Route::post('products/images/{product_id}', 'ProductController@upload_image');
+        Route::delete('products/images/{product_id}', 'ProductController@delete_image');
     }
 );
