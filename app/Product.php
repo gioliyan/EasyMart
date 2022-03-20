@@ -23,4 +23,10 @@ class Product extends Model
     {
         return $this->hasMany('App\ProductImage');
     }
+
+    public function Transactions()
+    {
+        return $this->hasMany('App\Transactions');
+    }
+
 }

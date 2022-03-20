@@ -132,9 +132,9 @@ class ProductController extends Controller
         $productInventory = Product::where('id', '=', $request['product_id'])->firstOrFail();
         
         if ($request['type'] == 1) {
-            $productInventory->stok += $request['count'];
+            $productInventory->stock += $request['amount'];
         }else{
-            $productInventory->stok -= $request['count'];
+            $productInventory->stock -= $request['amount'];
         }
         $productInventory->save();
     }
