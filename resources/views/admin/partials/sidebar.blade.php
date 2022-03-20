@@ -69,18 +69,18 @@
                     </ul>
                 </li>
 
-                <li class="has-sub {{ ($currentAdminMenu == 'transaksi') ? 'active expand' : ''}}">
+                <li class="has-sub {{ ($currentAdminMenu == 'transactions') ? 'active expand' : ''}}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#icons"
                         aria-expanded="false" aria-controls="icons">
                         <i class="mdi mdi-diamond-stone"></i>
                         <span class="nav-text">Transaksi</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ ($currentAdminMenu == 'transaksi') ? 'show' : ''}}" id="icons"
+                    <ul class="collapse {{ ($currentAdminMenu == 'transactions') ? 'show' : ''}}" id="icons"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li class="{{ ($currentAdminSubMenu == 'input stok') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{ url('admin/transaksis') }}">
+                                <a class="sidenav-item-link" href="{{ url('admin/transactions') }}">
                                     <span class="nav-text">Barang Masuk</span>
                                 </a>
                             </li>
@@ -129,7 +129,7 @@
                             </li> -->
 
                             <li class="{{ ($currentAdminSubMenu == 'laporan stok') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{url('admin/transaksis/listStock')}}">
+                                <a class="sidenav-item-link" href="{{url('admin/transactions/listStock')}}">
                                     <span class="nav-text">Laporan Stock</span>
                                 </a>
                             </li>
