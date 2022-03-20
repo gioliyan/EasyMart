@@ -32,6 +32,7 @@ class ProductController extends Controller
 
     public function index()
     {
+        $this->data['currentAdminSubMenu'] = 'manage';
         $this->data['products'] = Product::orderBy('name', 'ASC')->paginate(10);
 
         return view('admin.products.index', $this->data);

@@ -20,7 +20,7 @@ class CategoryController extends Controller
     {
         parent::__construct();
 
-        $this->data['currentAdminMenu'] = 'produk';
+        $this->data['currentAdminMenu'] = 'product';
         $this->data['currentAdminSubMenu'] = 'tambah';
     }
     

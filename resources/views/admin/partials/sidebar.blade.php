@@ -30,7 +30,7 @@
                     <ul class="collapse {{ ($currentAdminMenu == 'dashboard') ? 'show' : ''}}" id="dashboard"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            <li class="active">
+                            <li class="{{ ($currentAdminMenu == 'dashboard') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/dashboard') }}">
                                     <span class="nav-text">Dashboard</span>
                                 </a>
@@ -48,20 +48,20 @@
                     <ul class="collapse {{ ($currentAdminMenu == 'product') ? 'show' : ''}}" id="components"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'add') ? 'active' : ''}} ">
                                 <a class="sidenav-item-link" href="{{ url('admin/products/create') }}">
                                     <span class="nav-text">Tambah Produk</span>
                                 </a>
                             </li>
 
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'manage') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/products') }}">
                                     <span class="nav-text">Manage Produk</span>
                                 </a>
                             </li>
 
-                            <li>
-                                <a class="sidenav-item-link" href="{{ url('admin/categories') }}">
+                            <li class="{{ ($currentAdminSubMenu == 'tambah') ? 'active' : ''}}">
+                                <a class=" sidenav-item-link" href="{{ url('admin/categories') }}">
                                     <span class="nav-text">Edit Kategori</span>
                                 </a>
                             </li>
@@ -79,13 +79,13 @@
                     <ul class="collapse {{ ($currentAdminMenu == 'transaksi') ? 'show' : ''}}" id="icons"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'input stok') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/transaksis') }}">
                                     <span class="nav-text">Barang Masuk</span>
                                 </a>
                             </li>
 
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'penjualan') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/kasir') }}">
                                     <span class="nav-text">Penjualan</span>
                                 </a>
@@ -104,19 +104,19 @@
                     <ul class="collapse {{ ($currentAdminMenu == 'laporan') ? 'show' : ''}}" id="forms"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'riwayat transaksi') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/transaksis/listTransaksi') }}">
                                     <span class="nav-text">Riwayat Transaksi</span>
                                 </a>
                             </li>
 
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'riwayat input barang') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/transaksis/listRestock') }}">
                                     <span class="nav-text">Riwayat Input Barang</span>
                                 </a>
                             </li>
 
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'riwayat penjualan') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/orders') }}">
                                     <span class="nav-text">Riwayat Penjualan</span>
                                 </a>
@@ -128,7 +128,7 @@
                                 </a>
                             </li> -->
 
-                            <li>
+                            <li class="{{ ($currentAdminSubMenu == 'laporan stok') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{url('admin/transaksis/listStock')}}">
                                     <span class="nav-text">Laporan Stock</span>
                                 </a>
