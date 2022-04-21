@@ -11,6 +11,8 @@ class Product extends Model
         'name',
         'price',
         'stock',
+        'purchaseprice',
+        'sellingprice',
         'description'
     ];
 
@@ -28,5 +30,5 @@ class Product extends Model
     {
         return $this->hasMany('App\Transactions');
     }
-
+    
 }

@@ -23,4 +23,9 @@ class Transaction extends Model
     {
         return $this->hasMany('App\User','user_id');
     }
+
+    public function restock()
+    {
+        return $this->hasOne('App\RestockBatch', 'restockbatch_id');
+    }
 }
