@@ -31,13 +31,21 @@ $formTitle = !empty($category) ? 'Update' : 'Add'
                         'required' => 'required']) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('price', 'Price') !!}
-                        {!! Form::text('price', null, ['class' => 'form-control', 'placeholder' => 'price','required' =>
+                        {!! Form::label('purchase', 'Purchase Price') !!}
+                        {!! Form::text('purchaseprice', null, ['class' => 'form-control', 'placeholder' => 'purchase
+                        price','required' =>
+                        'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('selling', 'Selling Price') !!}
+                        {!! Form::text('sellingprice', null, ['class' => 'form-control', 'placeholder' => 'selling
+                        price','required' =>
                         'required']) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('category_ids', 'Category') !!}
-                        {!! Form::select('category_id', $categories, null, ['placeholder' => 'Chose Category', 'required'
+                        {!! Form::select('category_id', $categories, null, ['placeholder' => 'Chose Category',
+                        'required'
                         => 'required']); !!}
                     </div>
 

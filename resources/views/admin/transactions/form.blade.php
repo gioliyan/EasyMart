@@ -22,11 +22,16 @@ $formTitle = !empty($transaction) ? 'Update' : 'Stok'
                     @else
                     {!! Form::open(['url' => 'admin/transactions']) !!}
                     @endif
+                    {{ Form::hidden('product_id',$product->id) }}
+                    {{ Form::hidden('type',1) }}
                     <div class="form-group">
                         {!! Form::label('jumlah', 'Jumlah') !!}
-                        {{ Form::hidden('product_id',$product->id) }}
-                        {{ Form::hidden('type',1) }}
                         {!! Form::text('amount', null, ['class' => 'form-control', 'placeholder' => 'Jumlah stok masuk
+                        ','required' => 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('harga', 'Harga') !!}
+                        {!! Form::text('price', $product->price, ['class' => 'form-control', 'placeholder' => 'Harga
                         ','required' => 'required']) !!}
                     </div>
                     <div class="form-footer pt-5 border-top">
