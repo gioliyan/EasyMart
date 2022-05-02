@@ -16,10 +16,12 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedMediumInteger('product_id');
+            $table->unsignedMediumInteger('batch_id');
             $table->unsignedMediumInteger('user_id');
             $table->integer('type');
             $table->integer('amount');
-            $table->integer('initial_amount');
+            $table->integer('initial_amount')->nullable();
+            $table->integer('margin')->nullable();
             $table->timestamps();
         });
     }

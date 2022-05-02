@@ -8,9 +8,9 @@ class RestockBatch extends Model
 {
     protected $fillable = [
         'product_id',
-        'transaction_id',
         'amount',
-        'price'
+        'purchaseprice',
+        'sellingprice',
     ];
 
     public function product()

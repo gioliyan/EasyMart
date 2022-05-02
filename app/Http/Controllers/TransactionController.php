@@ -60,8 +60,15 @@ class TransactionController extends Controller
         $this->data['type'] = $request->type;
         $this->data['amount'] = $request->amount;
         $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;
-        Transaction::create($this->data);
-        app('App\Http\Controllers\ProductController')->updateStok($this->data);
+
+
+        $transaction = Transaction::create($this->data);
+        if ($transaction) {
+            $this->data['price'] = $request->amount;
+            $this->data['transaction_id'] = $transaction->id;
+            app('App\Http\Controllers\RestockBatchController')->store($this->data);
+            // app('App\Http\Controllers\ProductController')->updateStok($this->data);
+        }
         return redirect('admin/transactions');
     }
 

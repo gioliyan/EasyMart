@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->integer('total');
             $table->integer('payment');
             $table->integer('change');
+            $table->String('phone_number')->nullable();
             $table->timestamps();
         });
     }
