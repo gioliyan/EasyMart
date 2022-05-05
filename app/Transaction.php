@@ -8,10 +8,12 @@ class Transaction extends Model
 {
     protected $fillable = [
         'product_id',
+        'batch_id',
         'user_id',
         'type',
         'amount',
-        'initial_amount'
+        'initial_amount',
+        'margin'
     ];
 
     public function product()

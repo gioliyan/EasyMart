@@ -22,7 +22,7 @@
                             <tr>
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
-                                <td>{{ $product->stock }}</td>
+                                <td>{{ $product->total }}</td>
                                 <td>
                                     <a href="{{ url('admin/transactions/input/'.$product->id) }}"
                                         class="btn btn-warning btn-sm">Input Barang Masuk</a>
@@ -35,7 +35,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $products->links() }}
+
                 </div>
             </div>
         </div>

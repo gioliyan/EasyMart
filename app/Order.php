@@ -11,7 +11,8 @@ class Order extends Model
         'total',
         'transaction_id',
         'payment',
-        'change'
+        'change',
+        'phone_number'
     ];
     
     public function orderDetails()

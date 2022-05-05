@@ -9,10 +9,8 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'name',
-        'price',
-        'stock',
         'purchaseprice',
-        'sellingprice',
+        'sellingprice', 
         'description'
     ];
 
@@ -26,7 +24,7 @@ class Product extends Model
         return $this->hasMany('App\ProductImage');
     }
 
-    public function Transactions()
+    public function transactions()
     {
         return $this->hasMany('App\Transactions');
     }

@@ -16,9 +16,9 @@ class CreateRestockBatchesTable extends Migration
         Schema::create('restock_batches', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('transaction_id');
             $table->integer('amount');
-            $table->integer('price');
+            $table->decimal('purchaseprice', 15, 2);
+            $table->decimal('sellingprice', 15, 2);
             $table->timestamps();
         });
     }

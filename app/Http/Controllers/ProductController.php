@@ -219,4 +219,25 @@ class ProductController extends Controller
 
         return redirect('admin/products/' . $image->product->id . '/images');
     }
+
+    public function getAllProducts(){
+        $this->data['categories'] = Category::orderBy('name', 'ASC')->get();
+        $this->data['products'] = Product::with('productImages','category')
+                    ->select('products.*',DB::raw("SUM(amount) AS total"))
+                    ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+                    ->groupBy('restock_batches.product_id')
+                    ->orderBy('id', 'ASC')
+                    ->paginate(10);
+        return response()->json($this->data);
+    }
+    public function getProductsByCategory($category_id){
+        $this->data['products'] = Product::with('productImages','category')
+                    ->select('products.*',DB::raw("SUM(amount) AS total"))
+                    ->where('category_id', $category_id)
+                    ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+                    ->groupBy('restock_batches.product_id')
+                    ->orderBy('id', 'ASC')
+                    ->paginate(10);
+        return response()->json($this->data);
+    }
 }

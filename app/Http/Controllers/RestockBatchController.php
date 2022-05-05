@@ -35,7 +35,10 @@ class RestockBatchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $params = $request->except('_token');
+
+        $restockBatch = RestockBatch::create($params);
+        return $restockBatch;
     }
 
     /**

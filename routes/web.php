@@ -20,6 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/products', 'ProductController@getAllProducts');
+Route::get('/products/category/{category_id}', 'ProductController@getProductsByCategory');
 
 Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
