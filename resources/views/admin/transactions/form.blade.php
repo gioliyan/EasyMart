@@ -30,8 +30,17 @@ $formTitle = !empty($transaction) ? 'Update' : 'Stok'
                         ','required' => 'required']) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('harga', 'Harga') !!}
-                        {!! Form::text('price', $product->price, ['class' => 'form-control', 'placeholder' => 'Harga
+                        {!! Form::label('harga', 'Harga Beli') !!}
+                        {!! Form::text('purchaseprice', $product->purchaseprice, ['class' => 'form-control',
+                        'placeholder' =>
+                        'Harga
+                        ','required' => 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('harga', 'Harga Jual') !!}
+                        {!! Form::text('sellingprice', $product->sellingprice, ['class' => 'form-control', 'placeholder'
+                        =>
+                        'Harga
                         ','required' => 'required']) !!}
                     </div>
                     <div class="form-footer pt-5 border-top">

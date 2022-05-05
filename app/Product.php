@@ -24,7 +24,7 @@ class Product extends Model
         return $this->hasMany('App\ProductImage');
     }
 
-    public function Transactions()
+    public function transactions()
     {
         return $this->hasMany('App\Transactions');
     }

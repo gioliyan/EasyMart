@@ -13,9 +13,10 @@
                     <table class="table table-bordered table-stripped">
                         <thead>
                             <th>#</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
+                            <th>Nama Produk</th>
+                            <th>Kategori</th>
+                            <th>Harga Beli</th>
+                            <th>Harga Jual</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -24,11 +25,11 @@
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->category->name}}</td>
-                                <td>Rp {{ number_format($product->price, 2) }}</td>
+                                <td>Rp {{ number_format($product->purchaseprice, 2) }}</td>
+                                <td>Rp {{ number_format($product->sellingprice, 2) }}</td>
                                 <td>
                                     <a href="{{ url('admin/products/'. $product->id .'/edit') }}"
                                         class="btn btn-warning btn-sm">edit</a>
-
                                     {!! Form::open(['url' => 'admin/products/'. $product->id, 'class' => 'delete',
                                     'style' => 'display:inline-block']) !!}
                                     {!! Form::hidden('_method', 'DELETE') !!}
