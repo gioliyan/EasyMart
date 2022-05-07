@@ -15,11 +15,15 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('no_order');
+            $table->String('no_order');
             $table->integer('total');
             $table->integer('payment');
             $table->integer('change');
             $table->String('phone_number')->nullable();
+            $table->String('token')->nullable();
+            $table->String('payment_type')->nullable();
+            $table->String('transaction_status')->nullable();
+            $table->String('settlement_time')->nullable();
             $table->timestamps();
         });
     }

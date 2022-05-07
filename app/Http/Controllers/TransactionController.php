@@ -7,6 +7,7 @@ use App\Product;
 use App\Category;
 use App\RestockBatch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Response;
 
 use Str;
@@ -112,6 +113,27 @@ class TransactionController extends Controller
         //     app('App\Http\Controllers\ProductController')->updateStok($this->data);
         // }
         return redirect('admin/transactions');
+    }
+
+    public function selling(Request $request){
+        $products = $request;
+
+        foreach ($products as $product) {
+            
+        }
+        
+        if($products != null){
+            return response()->json([
+                'success' => true,
+                'message' => 'Order berhasil dicatat',
+                'products' => $products
+            ], 200);
+        }else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Order gagal ditambahkan',
+            ], 403);
+        }
     }
 
     /**

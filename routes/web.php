@@ -23,6 +23,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/products', 'ProductController@getAllProducts');
 Route::get('/products/category/{category_id}', 'ProductController@getProductsByCategory');
 
+
+Route::middleware(['cors'])->group(function () {
+    Route::post('/transactions', 'TransactionController@selling');
+    Route::post('/order', 'OrderController@showNota');
+    Route::post('/statusOrder', 'OrderController@getOrderStatus');
+});
+
+
 Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
     function () {

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\OrderDetail;
-use App\Order;
+use App\Cart;
 use Illuminate\Http\Request;
 
-class OrderDetailController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,26 +33,18 @@ class OrderDetailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($value)
+    public function store(Request $request)
     {
-        $product = array(
-            'order_id' => Order::latest()->first()->id,
-            'product_id' => $value->product_id,
-            'qty' => $value->qty,
-            'total' => $value->total,
-            'created_at' => \Carbon\carbon::now(),
-            'updated_at' => \Carbon\carbon::now()
-        );
-        OrderDetail::insert($product);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param  \App\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderDetail $orderDetail)
+    public function show(Cart $cart)
     {
         //
     }
@@ -61,10 +52,10 @@ class OrderDetailController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param  \App\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function edit(OrderDetail $orderDetail)
+    public function edit(Cart $cart)
     {
         //
     }
@@ -73,10 +64,10 @@ class OrderDetailController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrderDetail  $orderDetail
+     * @param  \App\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrderDetail $orderDetail)
+    public function update(Request $request, Cart $cart)
     {
         //
     }
@@ -84,10 +75,10 @@ class OrderDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param  \App\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderDetail $orderDetail)
+    public function destroy(Cart $cart)
     {
         //
     }
