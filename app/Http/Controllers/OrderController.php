@@ -38,7 +38,7 @@ class OrderController extends Controller
      */
     public function store($transaction)
     {
-        Order::create([
+        $order = Order::create([
             'no_order' => 'OD-'.date('Ymd').rand(1111,9999),
             'total' => $transaction->sum('total'),
             'payment' => $transaction->sum('total'),
@@ -46,6 +46,7 @@ class OrderController extends Controller
             'transaction_status' => 'pending',
             'token' => rand(1111,9999).'xxi'.rand(1111,9999),
         ]);
+        return $order;
     }
 
     public function getOrderStatus(Request $request){
@@ -73,27 +74,21 @@ class OrderController extends Controller
                 'qty' => $queue['qty'],
                 'total' => $queue['qty'] * $queue['price'],
             ]);
-            // $cart = new Cart;
-            // $cart->product_id = $queue['product_id'];
-            // $cart->qty = $queue['qty'];
-            // $cart->total =  $queue['qty'] * $queue['price'];
-            // $cart->save();
         }
 
         if (Cart::count()>0) {
             $transaction = Cart::get();
-            app('App\Http\Controllers\OrderController')->store($transaction);
+            $order = app('App\Http\Controllers\OrderController')->store($transaction);
         
             foreach ($transaction as $value) {
-                app('App\Http\Controllers\OrderDetailController')->store($value);
+                app('App\Http\Controllers\OrderDetailController')->store($value,$order);
                 Cart::where('id', $value->id)->delete();
             }
-        }
-
-        $this->data['order'] = Order::orderBy('created_at', 'desc')
+            $this->data['order'] = Order::where('id', $order->id)
                             ->with('orderDetails','orderDetails.product')
                             ->first();
-        return response()->json($this->data,200);
+            return response()->json($this->data,200);
+        }
     }
 
     public function requestPayment(Order $order){
@@ -121,6 +116,19 @@ class OrderController extends Controller
         );
         $snapToken = \Midtrans\Snap::getSnapToken($params);
         Order::where('no_order', $order->no_order)->first()->update(['token' => $snapToken]);        
+    }
+
+    public function confirmOrder(Request $request){
+        $order = Order::where('no_order', $request['order_id'])->first();
+        $orderEncryption = sha512($order->no_order+'200'+$order->total+serverkey);
+
+        if ($request['signature_key'] == $orderEncryption) {
+            $order->transaction_status = $request['transaction_status'];
+            $order->settlement_time = $request['settlement_time'];
+            $order->payment_type = $request['payment_type'];
+            $order->save();
+        }
+        
     }
 
     /**

@@ -25,7 +25,7 @@ Route::get('/products/category/{category_id}', 'ProductController@getProductsByC
 
 
 Route::middleware(['cors'])->group(function () {
-    Route::post('/transactions', 'TransactionController@selling');
+    Route::post('/confirmOrder', 'OrderController@confirmOrder');
     Route::post('/order', 'OrderController@showNota');
     Route::post('/statusOrder', 'OrderController@getOrderStatus');
 });

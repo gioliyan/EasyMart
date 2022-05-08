@@ -34,10 +34,10 @@ class OrderDetailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($value)
+    public function store($value,$order)
     {
         $product = array(
-            'order_id' => Order::latest()->first()->id,
+            'order_id' => $order['id'],
             'product_id' => $value->product_id,
             'qty' => $value->qty,
             'total' => $value->total,

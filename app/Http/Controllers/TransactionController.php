@@ -114,28 +114,6 @@ class TransactionController extends Controller
         // }
         return redirect('admin/transactions');
     }
-
-    public function selling(Request $request){
-        $products = $request;
-
-        foreach ($products as $product) {
-            
-        }
-        
-        if($products != null){
-            return response()->json([
-                'success' => true,
-                'message' => 'Order berhasil dicatat',
-                'products' => $products
-            ], 200);
-        }else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Order gagal ditambahkan',
-            ], 403);
-        }
-    }
-
     /**
      * Display the specified resource.
      *
