@@ -7,6 +7,7 @@ use App\Product;
 use App\Category;
 use App\RestockBatch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Response;
 
 use Str;
@@ -113,7 +114,6 @@ class TransactionController extends Controller
         // }
         return redirect('admin/transactions');
     }
-
     /**
      * Display the specified resource.
      *

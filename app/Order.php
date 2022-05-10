@@ -12,11 +12,15 @@ class Order extends Model
         'transaction_id',
         'payment',
         'change',
-        'phone_number'
+        'phone_number',
+        'token',
+        'payment_type',
+        'transaction_status',
+        'settlement_time',
     ];
     
     public function orderDetails()
     {
-        return $this->hasMany('App\OrderDetail', 'order_id');
+        return $this->hasMany('App\OrderDetail');
     }
 }

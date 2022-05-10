@@ -81,7 +81,7 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(  $product)
+    public function show(Product $product)
     {
         //
     }
@@ -231,6 +231,7 @@ class ProductController extends Controller
         return response()->json($this->data);
     }
     public function getProductsByCategory($category_id){
+        $this->data['categories'] = Category::orderBy('name', 'ASC')->get();
         $this->data['products'] = Product::with('productImages','category')
                     ->select('products.*',DB::raw("SUM(amount) AS total"))
                     ->where('category_id', $category_id)
