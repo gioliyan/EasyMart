@@ -46,6 +46,7 @@ class OrderController extends Controller
             'transaction_status' => 'pending',
             'token' => rand(1111,9999).'xxi'.rand(1111,9999),
         ]);
+        app('App\Http\Controllers\OrderController')->requestPayment($order);
         return $order;
     }
 
@@ -79,7 +80,6 @@ class OrderController extends Controller
         if (Cart::count()>0) {
             $transaction = Cart::get();
             $order = app('App\Http\Controllers\OrderController')->store($transaction);
-        
             foreach ($transaction as $value) {
                 app('App\Http\Controllers\OrderDetailController')->store($value,$order);
                 Cart::where('id', $value->id)->delete();
@@ -87,6 +87,7 @@ class OrderController extends Controller
             $this->data['order'] = Order::where('id', $order->id)
                             ->with('orderDetails','orderDetails.product')
                             ->first();
+            
             return response()->json($this->data,200);
         }
     }
@@ -110,8 +111,8 @@ class OrderController extends Controller
             'customer_details' => array(
                 'first_name' => 'Fumiko',
                 'last_name' => 'Vape Store',
-                'email' => 'budi.pra@example.com',
-                'phone' => $order->phone_number,
+                'email' => 'chrisdionisius@gmail.com',
+                'phone' => '088235906292',
             ),
         );
         $snapToken = \Midtrans\Snap::getSnapToken($params);
