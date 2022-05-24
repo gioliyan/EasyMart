@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\OrderDetail;
 use App\Cart;
 use App\Product;
+use App\RestockBatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -121,14 +123,52 @@ class OrderController extends Controller
 
     public function confirmOrder(Request $request){
         $order = Order::where('no_order', $request['order_id'])->first();
-        $orderEncryption = sha512($order->no_order+'200'+$order->total+serverkey);
+        // $orderEncryption = sha512($order->no_order+'200'+$order->total+serverkey);
 
-        if ($request['signature_key'] == $orderEncryption) {
-            $order->transaction_status = $request['transaction_status'];
-            $order->settlement_time = $request['settlement_time'];
-            $order->payment_type = $request['payment_type'];
-            $order->save();
+        // if ($request['signature_key'] == $orderEncryption) {
+        //     $order->transaction_status = $request['transaction_status'];
+        //     $order->settlement_time = $request['settlement_time'];
+        //     $order->payment_type = $request['payment_type'];
+        //     $order->save();
+        // }
+
+        //ambil query daftar product dari order 
+        $orders = OrderDetail::where('order_id', $order->id)->get();
+        
+        foreach ($orders as $order) {
+            $requestedAmount = $order->qty;
+            while ($requestedAmount > 0) {
+                $storedAmount = 0;
+                //ambil data batch teratas dengan sisa stok > 0
+                $batch = RestockBatch::where('product_id', $order->product_id)
+                        ->where('amount','>',0)
+                        ->orderBy('id', 'asc')
+                        ->first();
+                $remainingStockAmount = $batch->amount;
+                //cek apabila jumlah produk yang diminta < stok yang dimiliki
+                if ($remainingStockAmount > $requestedAmount) {
+                    $storedAmount = $requestedAmount;
+                    $remainingStockAmount = $remainingStockAmount - $requestedAmount;
+                    $requestedAmount = 0;
+                }
+                //cek apabila jumlah produk yang diminta > stok yang dimiliki
+                else{
+                    $storedAmount = $remainingStockAmount;
+                    $requestedAmount = $requestedAmount - $remainingStockAmount;
+                    $remainingStockAmount = 0;
+                }
+                //simpan perubahan jumlah stok pada table Restock Batch
+                $batch->amount = $remainingStockAmount;
+                $batch->save();
+                //tambahkan data transaksi penjualan
+                $this->data['product_id'] = $order->product_id;
+                $this->data['batch_id'] = $batch->id;
+                $this->data['storedAmount'] = $storedAmount;
+                app('App\Http\Controllers\TransactionController')->sellingTransaction($this->data);
+            }
+            // return $batch;
         }
+        return $orders;
         
     }
 

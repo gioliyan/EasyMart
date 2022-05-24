@@ -114,6 +114,17 @@ class TransactionController extends Controller
         // }
         return redirect('admin/transactions');
     }
+
+    public function sellingTransaction($request){
+        $this->data['user_id'] = 1;
+        $this->data['product_id'] = $request['product_id'];
+        $this->data['type'] = 2;
+        $this->data['amount'] = $request['storedAmount'];
+        // $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;        
+        $this->data['batch_id'] = $request['batch_id'];
+        $transaction = Transaction::create($this->data);
+        
+    }
     /**
      * Display the specified resource.
      *
