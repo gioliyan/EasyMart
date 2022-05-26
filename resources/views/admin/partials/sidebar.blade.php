@@ -94,29 +94,29 @@
                     </ul>
                 </li>
 
-                <li class="has-sub {{ ($currentAdminMenu == 'laporan') ? 'active expand' : ''}}">
+                <li class="has-sub {{ ($currentAdminMenu == 'reports') ? 'active expand' : ''}}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#forms"
                         aria-expanded="false" aria-controls="forms">
                         <i class="mdi mdi-email-mark-as-unread"></i>
                         <span class="nav-text">Laporan</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ ($currentAdminMenu == 'laporan') ? 'show' : ''}}" id="forms"
+                    <ul class="collapse {{ ($currentAdminMenu == 'reports') ? 'show' : ''}}" id="forms"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            <li class="{{ ($currentAdminSubMenu == 'riwayat transaksi') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{ url('admin/transaksis/listTransaksi') }}">
+                            <li class="{{ ($currentAdminSubMenu == 'transaction report') ? 'active' : ''}}">
+                                <a class="sidenav-item-link" href="{{ url('admin/transactions/listTransaction') }}">
                                     <span class="nav-text">Riwayat Transaksi</span>
                                 </a>
                             </li>
 
-                            <li class="{{ ($currentAdminSubMenu == 'riwayat input barang') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{ url('admin/transaksis/listRestock') }}">
+                            <li class="{{ ($currentAdminSubMenu == 'purchase report') ? 'active' : ''}}">
+                                <a class="sidenav-item-link" href="{{ url('admin/transactions/purchaseReport') }}">
                                     <span class="nav-text">Riwayat Input Barang</span>
                                 </a>
                             </li>
 
-                            <li class="{{ ($currentAdminSubMenu == 'riwayat penjualan') ? 'active' : ''}}">
+                            <li class="{{ ($currentAdminSubMenu == 'sell report') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{ url('admin/orders') }}">
                                     <span class="nav-text">Riwayat Penjualan</span>
                                 </a>
@@ -128,8 +128,8 @@
                                 </a>
                             </li> -->
 
-                            <li class="{{ ($currentAdminSubMenu == 'laporan stok') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{url('admin/transactions/listStock')}}">
+                            <li class="{{ ($currentAdminSubMenu == 'stock report') ? 'active' : ''}}">
+                                <a class="sidenav-item-link" href="{{url('admin/transactions/stockReport')}}">
                                     <span class="nav-text">Laporan Stock</span>
                                 </a>
                             </li>

@@ -74,6 +74,43 @@ class TransactionController extends Controller
         return view('admin.transactions.index', $this->data); 
     }
 
+    public function listTransaction()
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'transaction report';
+        $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
+        return view('admin.transactions.listTransaction', $this->data);
+    }
+
+    public function listSelling()
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'purchase report';
+        $this->data['transactions'] = Transaction::where('type', 2)->orderBy('created_at', 'DESC')->paginate(10);
+        return view('admin.transactions.listTransaksi', $this->data);
+    }
+
+    public function stockReport()
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'stock report';
+        $this->data['products'] = Product::with('productImages','category')
+                                    ->select('products.*',DB::raw("SUM(amount) AS total"))
+                                    ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+                                    ->groupBy('restock_batches.product_id')
+                                    ->orderBy('id', 'ASC')
+                                    ->paginate(10);
+        return view('admin.transactions.stockReport', $this->data);
+    }
+
+    public function purchaseReport()
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'purchase report';
+        $this->data['restocks'] = RestockBatch::orderBy('product_id', 'DESC')->paginate(10);
+        return view('admin.transactions.purchaseReport', $this->data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
