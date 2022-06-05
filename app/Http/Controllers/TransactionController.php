@@ -153,7 +153,7 @@ class TransactionController extends Controller
         $product_id = $request->product_id;
         $this->data['user_id'] = Auth::user()->id;
         $this->data['product_id'] = $product_id;
-        $this->data['type'] = $request->type;
+        $this->data['$request->type'] = $request->type;
         $this->data['amount'] = $request->amount;
         $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;
         $restockBatch = app('App\Http\Controllers\RestockBatchController')->store($request);
@@ -169,16 +169,22 @@ class TransactionController extends Controller
         //     app('App\Http\Controllers\RestockBatchController')->store($this->data);
         //     app('App\Http\Controllers\ProductController')->updateStok($this->data);
         // }
-        return redirect('admin/transactions');
+        return $this->data;
+        // return redirect('admin/transactions');
     }
 
     public function sellingTransaction($request){
         $this->data['user_id'] = 1;
         $this->data['product_id'] = $request['product_id'];
         $this->data['type'] = 2;
-        $this->data['amount'] = $request['storedAmount'];
-        // $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;        
+        $this->data['amount'] = $request['storedAmount'];      
         $this->data['batch_id'] = $request['batch_id'];
+        //ambil harga jual saat ini
+        $sellingPrice = Product::where('id', '=', $request['product_id'])->firstOrFail()->sellingprice;
+        //ambil harga beli/kulak sebelumnya
+        $purchasePrice = RestockBatch::where('id', '=', $request['batch_id'])->firstOrFail()->purchaseprice;
+        //insert total margin
+        $this->data['margin'] = $sellingPrice - $purchasePrice;
         $transaction = Transaction::create($this->data);
         
     }
