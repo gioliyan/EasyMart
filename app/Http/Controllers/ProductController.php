@@ -63,11 +63,13 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->request->add(['stock' => '0']);
         $params = $request->except('_token');
-
-        if (Product::create($params)) {
+        $product = Product::create($params);
+        if ($product) {
             Session::flash('success', 'Product has been saved');
+            $request->request->add(['amount' => '0']);
+            $request->request->add(['product_id' => $product->id]);
+            app('App\Http\Controllers\RestockBatchController')->store($request);
         }else {
             Session::flash('error', 'Product could not be saved');
         }

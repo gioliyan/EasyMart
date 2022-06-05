@@ -126,10 +126,10 @@ class OrderController extends Controller
         // $orderEncryption = sha512($order->no_order+'200'+$order->total+serverkey);
 
         // if ($request['signature_key'] == $orderEncryption) {
-        //     $order->transaction_status = $request['transaction_status'];
-        //     $order->settlement_time = $request['settlement_time'];
-        //     $order->payment_type = $request['payment_type'];
-        //     $order->save();
+            $order->transaction_status = $request['transaction_status'];
+            $order->settlement_time = $request['settlement_time'];
+            $order->payment_type = $request['payment_type'];
+            $order->save();
         // }
 
         //ambil query daftar product dari order 
