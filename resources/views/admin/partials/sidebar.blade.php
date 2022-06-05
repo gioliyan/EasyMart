@@ -105,7 +105,7 @@
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li class="{{ ($currentAdminSubMenu == 'transaction report') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{ url('admin/transactions/listTransaction') }}">
+                                <a class="sidenav-item-link" href="{{ url('admin/transactions/transactionReport') }}">
                                     <span class="nav-text">Riwayat Transaksi</span>
                                 </a>
                             </li>
@@ -117,7 +117,7 @@
                             </li>
 
                             <li class="{{ ($currentAdminSubMenu == 'sell report') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{ url('admin/orders') }}">
+                                <a class="sidenav-item-link" href="{{ url('admin/transactions/purchaseHistory') }}">
                                     <span class="nav-text">Riwayat Penjualan</span>
                                 </a>
                             </li>

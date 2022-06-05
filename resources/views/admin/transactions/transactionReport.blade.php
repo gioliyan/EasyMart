@@ -14,30 +14,31 @@
                         <thead>
                             <th>#ID</th>
                             <th>Produk</th>
-                            <th>User</th>
                             <th>Jenis</th>
-                            <th>Jumlah Awal</th>
+                            <th>Total Harga</th>
                             <th>Jumlah</th>
                             <th>Tanggal</th>
+                            <th>Jam</th>
                         </thead>
                         <tbody>
                             @forelse ($transactions as $transaction)
                             <tr>
                                 <td>{{ $transaction->id }}</td>
                                 <td>{{ $transaction->product->name }}</td>
-                                <td>{{ $transaction->user->name }}</td>
-                                @if($transaction->jenis == 1)
+                                @if($transaction->type == "1")
                                 <td>
                                     <div class="bg-primary text-white" align="center">Barang masuk</div>
                                 </td>
+                                <td> <div class="text-primary">Rp {{ number_format ($transaction->amount * $transaction->product->purchaseprice , 0 , '.', '.') }} </div> </td>
                                 @else
                                 <td>
                                     <div class="bg-success text-white" align="center">Barang keluar</div>
                                 </td>
+                                <td> <div class="text-success">Rp {{ number_format ($transaction->amount * $transaction->product->sellingprice , 0 , '.', '.') }} </div> </td>
                                 @endif
-                                <td>{{ $transaction->initial_amount }}</td>
                                 <td>{{ $transaction->amount }}</td>
-                                <td>{{ $transaction->created_at }}</td>
+                                <td>{{ date('Y-m-d', strtotime($transaction->created_at) )}}</td>
+                                <td>{{ date('H:i', strtotime($transaction->created_at) )}}</td>
                             </tr>
                             @empty
                             <tr>

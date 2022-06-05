@@ -35,10 +35,12 @@ Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
     function () {
         Route::resource('categories', 'CategoryController');
-        Route::get('transactions/listTransaction', 'TransactionController@listTransaction');
-        Route::get('transactions/listSelling', 'TransactionController@listSelling');
+        Route::get('transactions/purchaseReportbydate/{days}', 'TransactionController@purchaseReportbydate');
+        Route::get('transactions/transactionReport', 'TransactionController@transactionReport');
+        Route::get('transactions/purchaseHistory', 'TransactionController@purchaseHistory');
         Route::get('transactions/purchaseReport', 'TransactionController@purchaseReport');
         Route::get('transactions/stockReport', 'TransactionController@stockReport');
+        
         Route::get('transactions/input/{product_id}', 'TransactionController@create');
         Route::resource('transactions', 'TransactionController');
         Route::resource('products', 'ProductController');

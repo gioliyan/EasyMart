@@ -9,6 +9,7 @@ use App\RestockBatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Response;
+use Carbon\Carbon;
 
 use Str;
 use Auth;
@@ -82,12 +83,12 @@ class TransactionController extends Controller
         return view('admin.transactions.listTransaction', $this->data);
     }
 
-    public function listSelling()
+    public function purchaseHistory()
     {
         $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'purchase report';
+        $this->data['currentAdminSubMenu'] = 'sell report';
         $this->data['transactions'] = Transaction::where('type', 2)->orderBy('created_at', 'DESC')->paginate(10);
-        return view('admin.transactions.listTransaksi', $this->data);
+        return view('admin.transactions.purchaseHistory', $this->data);
     }
 
     public function stockReport()
@@ -103,11 +104,30 @@ class TransactionController extends Controller
         return view('admin.transactions.stockReport', $this->data);
     }
 
+    public function transactionReport()
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'transaction report';
+        $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
+        return view('admin.transactions.transactionReport', $this->data);
+    }
+
     public function purchaseReport()
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'purchase report';
+        $this->data['currentcurrentSortmenu'] = 'all day';
         $this->data['restocks'] = RestockBatch::orderBy('product_id', 'DESC')->paginate(10);
+        return view('admin.transactions.purchaseReport', $this->data);
+    }
+
+    public function purchaseReportbydate(int $days)
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'purchase report';
+        $this->data['currentcurrentSortmenu'] = 'day '.$days;
+        $date = \Carbon\Carbon::today()->subDays($days);
+        $this->data['restocks'] = RestockBatch::where('created_at', '>=', $date)->paginate(10);
         return view('admin.transactions.purchaseReport', $this->data);
     }
 

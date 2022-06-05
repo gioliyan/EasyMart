@@ -24,8 +24,8 @@
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->total }}</td>
-                                <td>{{ $product->purchaseprice }}</td>
-                                <td>{{ $product->sellingprice }}</td>
+                                <td>Rp {{ number_format ($product->purchaseprice , 0 , '.', '.') }}</td>
+                                <td>Rp {{ number_format ($product->sellingprice , 0 , '.', '.') }}</td>
                             </tr>
                             @empty
                             <tr>
