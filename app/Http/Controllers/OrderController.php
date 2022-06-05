@@ -94,6 +94,33 @@ class OrderController extends Controller
         }
     }
 
+    public function sellingReport(){
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'selling report';
+        $this->data['currentSortmenu'] = 'all day';
+        $this->data['orders'] = Order::where('transaction_status', 'settlement')
+                            ->orderBy('updated_at', 'DESC')
+                            ->paginate(10);
+        $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
+                            ->sum('payment');
+        return view('admin.transactions.sellingReport', $this->data);
+    }
+
+    public function sellingReportByDate(int $days){
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'selling report';
+        $this->data['currentSortmenu'] = 'day '.$days;
+        $date = \Carbon\Carbon::today()->subDays($days);
+        $this->data['orders'] = Order::where('transaction_status', 'settlement')
+                            ->where('updated_at', '>=', $date)
+                            ->orderBy('updated_at', 'DESC')
+                            ->paginate(10);
+        $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
+                                    ->where('updated_at', '>=', $date)
+                                    ->sum('payment');
+        return view('admin.transactions.sellingReport', $this->data);
+    }
+
     public function requestPayment(Order $order){
 
         // Set your Merchant Server Key

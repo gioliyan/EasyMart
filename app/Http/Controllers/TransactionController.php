@@ -83,12 +83,12 @@ class TransactionController extends Controller
         return view('admin.transactions.listTransaction', $this->data);
     }
 
-    public function purchaseHistory()
+    public function dispatchReport()
     {
         $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'sell report';
-        $this->data['transactions'] = Transaction::where('type', 2)->orderBy('created_at', 'DESC')->paginate(10);
-        return view('admin.transactions.purchaseHistory', $this->data);
+        $this->data['currentAdminSubMenu'] = 'dispatch report';
+        $this->data['transactions'] = Transaction::where('type', 2)->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.transactions.dispatchReport', $this->data);
     }
 
     public function stockReport()
@@ -116,7 +116,7 @@ class TransactionController extends Controller
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'purchase report';
-        $this->data['currentcurrentSortmenu'] = 'all day';
+        $this->data['currentSortmenu'] = 'all day';
         $this->data['restocks'] = RestockBatch::orderBy('product_id', 'DESC')->paginate(10);
         return view('admin.transactions.purchaseReport', $this->data);
     }
@@ -125,7 +125,7 @@ class TransactionController extends Controller
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'purchase report';
-        $this->data['currentcurrentSortmenu'] = 'day '.$days;
+        $this->data['currentSortmenu'] = 'day '.$days;
         $date = \Carbon\Carbon::today()->subDays($days);
         $this->data['restocks'] = RestockBatch::where('created_at', '>=', $date)->paginate(10);
         return view('admin.transactions.purchaseReport', $this->data);

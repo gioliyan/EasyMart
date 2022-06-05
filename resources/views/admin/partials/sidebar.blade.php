@@ -116,17 +116,17 @@
                                 </a>
                             </li>
 
-                            <li class="{{ ($currentAdminSubMenu == 'sell report') ? 'active' : ''}}">
-                                <a class="sidenav-item-link" href="{{ url('admin/transactions/purchaseHistory') }}">
-                                    <span class="nav-text">Riwayat Penjualan</span>
+                            <li class="{{ ($currentAdminSubMenu == 'dispatch report') ? 'active' : ''}}">
+                                <a class="sidenav-item-link" href="{{ url('admin/transactions/dispatchReport') }}">
+                                    <span class="nav-text">Riwayat Barang Keluar</span>
                                 </a>
                             </li>
 
-                            <!-- <li>
-                                <a class="sidenav-item-link" href="{{url('admin/transactions/penjualan')}}">
+                            <li class="{{ ($currentAdminSubMenu == 'selling report') ? 'active' : ''}}">
+                                <a class="sidenav-item-link" href="{{url('admin/transactions/sellingReport')}}">
                                     <span class="nav-text">Laporan Penjualan</span>
                                 </a>
-                            </li> -->
+                            </li>
 
                             <li class="{{ ($currentAdminSubMenu == 'stock report') ? 'active' : ''}}">
                                 <a class="sidenav-item-link" href="{{url('admin/transactions/stockReport')}}">

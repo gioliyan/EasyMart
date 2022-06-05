@@ -9,22 +9,26 @@
                     <h2>Products</h2>
                 </div>
                 <div class="card-body">
-                <!-- <div class="mb-3 d-flex flex-row-reverse">
+                    <!-- <div class="mb-3 d-flex flex-row-reverse">
                     <a type="button" class="btn btn-warning ml-2" href="{{ url('admin/transactions/purchaseReportbydate/1') }}">1 Hari</a>
                     <a type="button" class="btn btn-warning ml-2" href="{{ url('admin/transactions/purchaseReportbydate/7') }}">7 Hari</a>
                     <a type="button" class="btn btn-warning ml-2" href="{{ url('admin/transactions/purchaseReportbydate/30') }}">30 Hari</a>
                 </div> -->
-                <div class="mb-3 d-flex flex-row-reverse">
-                    <a type="button" class="btn  ml-2 {{ ($currentcurrentSortmenu == 'all day') ? 'btn-warning' : ''}}" href="{{ url('admin/transactions/purchaseReport') }}">Semua Hari</a>                    
-                    <a type="button" class="btn  ml-2 {{ ($currentcurrentSortmenu == 'day 30') ? 'btn-warning' : ''}}" href="{{ url('admin/transactions/purchaseReportbydate/30') }}">30 Hari</a>
-                    <a type="button" class="btn  ml-2 {{ ($currentcurrentSortmenu == 'day 7') ? 'btn-warning' : ''}}" href="{{ url('admin/transactions/purchaseReportbydate/7') }}">7 Hari</a>
-                    <a type="button" class="btn  ml-2 {{ ($currentcurrentSortmenu == 'day 1') ? 'btn-warning' : ''}}" href="{{ url('admin/transactions/purchaseReportbydate/1') }}">1 Hari</a>
-                </div>
+                    <div class="mb-3 d-flex flex-row-reverse">
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'all day') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/purchaseReport') }}">Semua Hari</a>
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 30') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/purchaseReportbydate/30') }}">30 Hari</a>
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 7') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/purchaseReportbydate/7') }}">7 Hari</a>
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/purchaseReportbydate/1') }}">1 Hari</a>
+                    </div>
                     @include('admin.partials.flash')
                     <table class="table table-bordered table-stripped">
                         <thead>
                             <th>Kode Batch</th>
-                            <th>Kode Produk</th> 
+                            <th>Kode Produk</th>
                             <th>Nama</th>
                             <th>Stok</th>
                             <th>Harga Beli</th>

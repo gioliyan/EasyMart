@@ -37,8 +37,10 @@ Route::group(
         Route::resource('categories', 'CategoryController');
         Route::get('transactions/purchaseReportbydate/{days}', 'TransactionController@purchaseReportbydate');
         Route::get('transactions/transactionReport', 'TransactionController@transactionReport');
-        Route::get('transactions/purchaseHistory', 'TransactionController@purchaseHistory');
+        Route::get('transactions/dispatchReport', 'TransactionController@dispatchReport');
         Route::get('transactions/purchaseReport', 'TransactionController@purchaseReport');
+        Route::get('transactions/sellingReport', 'OrderController@sellingReport');
+        Route::get('transactions/sellingReportByDate/{days}', 'OrderController@sellingReportByDate');
         Route::get('transactions/stockReport', 'TransactionController@stockReport');
         
         Route::get('transactions/input/{product_id}', 'TransactionController@create');
