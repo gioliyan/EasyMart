@@ -75,19 +75,30 @@ class TransactionController extends Controller
         return view('admin.transactions.index', $this->data); 
     }
 
-    public function listTransaction()
-    {
-        $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'transaction report';
-        $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
-        return view('admin.transactions.listTransaction', $this->data);
-    }
+    // public function listTransaction()
+    // {
+    //     $this->data['currentAdminMenu'] = 'reports';
+    //     $this->data['currentAdminSubMenu'] = 'transaction report';
+    //     $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
+    //     return view('admin.transactions.listTransaction', $this->data);
+    // }
 
     public function dispatchReport()
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'dispatch report';
+        $this->data['currentSortmenu'] = 'all day';
         $this->data['transactions'] = Transaction::where('type', 2)->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.transactions.dispatchReport', $this->data);
+    }
+
+    public function dispatchReportbydate(int $days)
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'dispatch report';
+        $this->data['currentSortmenu'] = 'day '.$days;
+        $date = \Carbon\Carbon::today()->subDays($days);
+        $this->data['transactions'] = Transaction::where('type', 2)->where('created_at', '>=', $date)->paginate(10);
         return view('admin.transactions.dispatchReport', $this->data);
     }
 
@@ -95,6 +106,7 @@ class TransactionController extends Controller
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'stock report';
+        $this->data['currentSortmenu'] = 'all day';
         $this->data['products'] = Product::with('productImages','category')
                                     ->select('products.*',DB::raw("SUM(amount) AS total"))
                                     ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
@@ -104,11 +116,37 @@ class TransactionController extends Controller
         return view('admin.transactions.stockReport', $this->data);
     }
 
+    public function stockReportbydate(int $days)
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'stock report';
+        $this->data['currentSortmenu'] = 'day '.$days;
+        $date = \Carbon\Carbon::today()->subDays($days);
+        $this->data['products'] = Product::with('productImages','category')
+                                    ->select('products.*',DB::raw("SUM(amount) AS total"))
+                                    ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+                                    ->groupBy('restock_batches.product_id')
+                                    ->where('created_at', '>=', $date)
+                                    ->paginate(10);
+        return view('admin.transactions.stockReport', $this->data);
+    }
+
     public function transactionReport()
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'transaction report';
+        $this->data['currentSortmenu'] = 'all day';
         $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
+        return view('admin.transactions.transactionReport', $this->data);
+    }
+
+    public function transactionReportbydate(int $days)
+    {
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'transaction report';
+        $this->data['currentSortmenu'] = 'day '.$days;
+        $date = \Carbon\Carbon::today()->subDays($days);
+        $this->data['transactions'] = Transaction::where('created_at', '>=', $date)->paginate(10);
         return view('admin.transactions.transactionReport', $this->data);
     }
 

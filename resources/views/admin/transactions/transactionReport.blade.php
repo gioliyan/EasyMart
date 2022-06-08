@@ -9,6 +9,16 @@
                     <h2>Transaksi</h2>
                 </div>
                 <div class="card-body">
+                    <div class="mb-3 d-flex flex-row-reverse">
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'all day') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/transactionReport') }}">Semua Hari</a>
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 30') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/transactionReportbydate/30') }}">30 Hari</a>
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 7') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/transactionReportbydate/7') }}">7 Hari</a>
+                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
+                            href="{{ url('admin/transactions/transactionReportbydate/1') }}">1 Hari</a>
+                    </div>
                     @include('admin.partials.flash')
                     <table class="table table-bordered table-stripped">
                         <thead>

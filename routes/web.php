@@ -36,6 +36,9 @@ Route::group(
     function () {
         Route::resource('categories', 'CategoryController');
         Route::get('transactions/purchaseReportbydate/{days}', 'TransactionController@purchaseReportbydate');
+        Route::get('transactions/transactionReportbydate/{days}', 'TransactionController@transactionReportbydate');
+        Route::get('transactions/dispatchReportbydate/{days}', 'TransactionController@dispatchReportbydate');
+        Route::get('transactions/stockReportbydate/{days}', 'TransactionController@stockReportbydate');
         Route::get('transactions/transactionReport', 'TransactionController@transactionReport');
         Route::get('transactions/dispatchReport', 'TransactionController@dispatchReport');
         Route::get('transactions/purchaseReport', 'TransactionController@purchaseReport');
