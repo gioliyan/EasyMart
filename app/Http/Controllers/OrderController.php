@@ -121,6 +121,30 @@ class OrderController extends Controller
         return view('admin.transactions.sellingReport', $this->data);
     }
 
+    public function searchSellingreport(Request $request)
+    {
+        $search = $request->get('search');
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'selling report';
+        $this->data['currentSortmenu'] = 'all day';
+        $this->data['orders'] = Order::where('transaction_status', 'settlement')
+                            ->where('updated_at', '>=', $date)
+                            ->orderBy('updated_at', 'DESC')
+                            ->paginate(10);
+        $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
+                            ->where('updated_at', '>=', $date)
+                            ->sum('payment');
+
+        // $this->data['products'] = Product::with('productImages','category')
+        //                             ->select('products.*',DB::raw("SUM(amount) AS total"))
+        //                             ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+        //                             ->groupBy('restock_batches.product_id')
+        //                             ->where('name', 'like', '%' . $search . '%')
+        //                             ->paginate(10);
+        
+        return view('admin.transactions.sellingReport', $this->data);
+    }
+
     public function requestPayment(Order $order){
 
         // Set your Merchant Server Key

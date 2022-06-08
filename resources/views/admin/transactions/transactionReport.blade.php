@@ -19,6 +19,17 @@
                         <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
                             href="{{ url('admin/transactions/transactionReportbydate/1') }}">1 Hari</a>
                     </div>
+                    <div class="row flex-row-reverse">
+                        <div class="col-md-5">
+                            <form action="{{ url('admin/transactions/searchTransactionreport') }}">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Search.." name="search"
+                                        value="{{ request('search') }}">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     @include('admin.partials.flash')
                     <table class="table table-bordered table-stripped">
                         <thead>

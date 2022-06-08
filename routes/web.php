@@ -35,6 +35,11 @@ Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
     function () {
         Route::resource('categories', 'CategoryController');
+        Route::get('transactions/searchPurchasereport', 'TransactionController@searchPurchasereport');
+        Route::get('transactions/searchTransactionreport', 'TransactionController@searchTransactionreport');
+        Route::get('transactions/searchDispatchreport', 'TransactionController@searchDispatchreport');
+        Route::get('transactions/searchStockreport', 'TransactionController@searchStockreport');
+        Route::get('transactions/searchSellingreport', 'OrderController@searchSellingreport');
         Route::get('transactions/purchaseReportbydate/{days}', 'TransactionController@purchaseReportbydate');
         Route::get('transactions/transactionReportbydate/{days}', 'TransactionController@transactionReportbydate');
         Route::get('transactions/dispatchReportbydate/{days}', 'TransactionController@dispatchReportbydate');
@@ -46,6 +51,7 @@ Route::group(
         Route::get('transactions/sellingReportByDate/{days}', 'OrderController@sellingReportByDate');
         Route::get('transactions/stockReport', 'TransactionController@stockReport');
         
+        Route::get('products/search', 'ProductController@searchProduct');
         Route::get('transactions/input/{product_id}', 'TransactionController@create');
         Route::resource('transactions', 'TransactionController');
         Route::resource('products', 'ProductController');

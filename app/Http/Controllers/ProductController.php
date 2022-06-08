@@ -38,6 +38,15 @@ class ProductController extends Controller
         return view('admin.products.index', $this->data);
     }
 
+    public function searchProduct(Request $request)
+    {
+        $search = $request->get('search');
+        $this->data['currentAdminSubMenu'] = 'manage';
+        $this->data['products'] = Product::where('name', 'like', '%' . $search . '%')->paginate(10);
+        
+        return view('admin.products.index', $this->data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
