@@ -15,20 +15,38 @@
                                 Rp {{ number_format ($totalRevenue , 0 , '.', '.') }}</h4>
                         </div>
                         <div class="mb-3 d-flex flex-row-reverse col-lg-6">
-                            <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'all day') ? 'btn-warning' : ''}}"
-                                href="{{ url('admin/transactions/purchaseReport') }}">Semua Hari</a>
-                            <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 30') ? 'btn-warning' : ''}}"
-                                href="{{ url('admin/transactions/purchaseReportbydate/30') }}">30 Hari</a>
-                            <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 7') ? 'btn-warning' : ''}}"
-                                href="{{ url('admin/transactions/purchaseReportbydate/7') }}">7 Hari</a>
-                            <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
-                                href="{{ url('admin/transactions/purchaseReportbydate/1') }}">1 Hari</a>
+                            <form action="{{ url('admin/transactions/searchPurchasereport') }}">
+                                <input type="hidden" class="form-control" name="sortmenu" value="all day">
+                                <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                                <button class="btn  ml-2 {{ ($currentSortmenu == 'all day') ? 'btn-warning' : ''}}"
+                                    type="submit">Semua Hari</button>
+                            </form>
+                            <form action="{{ url('admin/transactions/searchPurchasereport') }}">
+                                <input type="hidden" class="form-control" name="sortmenu" value="day 30">
+                                <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                                <button class="btn  ml-2 {{ ($currentSortmenu == 'day 30') ? 'btn-warning' : ''}}"
+                                    type="submit">30 Hari</button>
+                            </form>
+                            <form action="{{ url('admin/transactions/searchPurchasereport') }}">
+                                <input type="hidden" class="form-control" name="sortmenu" value="day 7">
+                                <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                                <button class="btn  ml-2 {{ ($currentSortmenu == 'day 7') ? 'btn-warning' : ''}}"
+                                    type="submit">7 Hari</button>
+                            </form>
+                            <form action="{{ url('admin/transactions/searchPurchasereport') }}">
+                                <input type="hidden" class="form-control" name="sortmenu" value="day 1">
+                                <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                                <button class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
+                                    type="submit">1 Hari</button>
+                            </form>
                         </div>
                     </div>
                     <div class="row flex-row-reverse">
                         <div class="col-md-5">
                             <form action="{{ url('admin/transactions/searchPurchasereport') }}">
                                 <div class="input-group mb-3">
+                                    <input type="hidden" class="form-control" name="sortmenu"
+                                        value="{{$currentSortmenu }}">
                                     <input type="text" class="form-control" placeholder="Search.." name="search"
                                         value="{{ request('search') }}">
                                     <button class="btn btn-primary" type="submit">Search</button>
@@ -65,7 +83,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $restocks->links() }}
+                    {{ $restocks->withQueryString()->links() }}
                 </div>
             </div>
         </div>

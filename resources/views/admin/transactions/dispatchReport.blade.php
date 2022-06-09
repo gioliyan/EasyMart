@@ -10,19 +10,37 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3 d-flex flex-row-reverse">
-                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'all day') ? 'btn-warning' : ''}}"
-                            href="{{ url('admin/transactions/dispatchReport') }}">Semua Hari</a>
-                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 30') ? 'btn-warning' : ''}}"
-                            href="{{ url('admin/transactions/dispatchReportbydate/30') }}">30 Hari</a>
-                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 7') ? 'btn-warning' : ''}}"
-                            href="{{ url('admin/transactions/dispatchReportbydate/7') }}">7 Hari</a>
-                        <a type="button" class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
-                            href="{{ url('admin/transactions/dispatchReportbydate/1') }}">1 Hari</a>
+                        <form action="{{ url('admin/transactions/searchDispatchreport') }}">
+                            <input type="hidden" class="form-control" name="sortmenu" value="all day">
+                            <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                            <button class="btn  ml-2 {{ ($currentSortmenu == 'all day') ? 'btn-warning' : ''}}"
+                                type="submit">Semua Hari</button>
+                        </form>
+                        <form action="{{ url('admin/transactions/searchDispatchreport') }}">
+                            <input type="hidden" class="form-control" name="sortmenu" value="day 30">
+                            <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                            <button class="btn  ml-2 {{ ($currentSortmenu == 'day 30') ? 'btn-warning' : ''}}"
+                                type="submit">30 Hari</button>
+                        </form>
+                        <form action="{{ url('admin/transactions/searchDispatchreport') }}">
+                            <input type="hidden" class="form-control" name="sortmenu" value="day 7">
+                            <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                            <button class="btn  ml-2 {{ ($currentSortmenu == 'day 7') ? 'btn-warning' : ''}}"
+                                type="submit">7 Hari</button>
+                        </form>
+                        <form action="{{ url('admin/transactions/searchDispatchreport') }}">
+                            <input type="hidden" class="form-control" name="sortmenu" value="day 1">
+                            <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                            <button class="btn  ml-2 {{ ($currentSortmenu == 'day 1') ? 'btn-warning' : ''}}"
+                                type="submit">1 Hari</button>
+                        </form>
                     </div>
                     <div class="row flex-row-reverse">
                         <div class="col-md-5">
                             <form action="{{ url('admin/transactions/searchDispatchreport') }}">
                                 <div class="input-group mb-3">
+                                    <input type="hidden" class="form-control" name="sortmenu"
+                                        value="{{$currentSortmenu }}">
                                     <input type="text" class="form-control" placeholder="Search.." name="search"
                                         value="{{ request('search') }}">
                                     <button class="btn btn-primary" type="submit">Search</button>
@@ -45,7 +63,9 @@
                             <tr>
                                 <td>{{ $transaction->id }}</td>
                                 <td>{{ $transaction->product->name }}</td>
-                                <td>Rp {{ number_format ($transaction->amount * $transaction->product->sellingprice , 0 , '.', '.') }}</td>
+                                <td>Rp
+                                    {{ number_format ($transaction->amount * $transaction->product->sellingprice , 0 , '.', '.') }}
+                                </td>
                                 <td>{{ $transaction->amount }}</td>
                                 <td>{{ date('Y-m-d', strtotime($transaction->created_at) )}}</td>
                                 <td>{{ date('H:i', strtotime($transaction->created_at) )}}</td>
@@ -57,7 +77,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $transactions->links() }}
+                    {{ $transactions->withQueryString()->links() }}
                 </div>
             </div>
         </div>

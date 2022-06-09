@@ -6,6 +6,7 @@ use App\Transaction;
 use App\Product;
 use App\Category;
 use App\RestockBatch;
+use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Response;
@@ -87,32 +88,50 @@ class TransactionController extends Controller
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'dispatch report';
+        $this->data['search'] = '';
         $this->data['currentSortmenu'] = 'all day';
         $this->data['transactions'] = Transaction::where('type', 2)->orderBy('id', 'DESC')->paginate(10);
         return view('admin.transactions.dispatchReport', $this->data);
     }
 
-    public function dispatchReportbydate(int $days)
-    {
-        $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'dispatch report';
-        $this->data['currentSortmenu'] = 'day '.$days;
-        $date = \Carbon\Carbon::today()->subDays($days);
-        $this->data['transactions'] = Transaction::where('type', 2)->where('created_at', '>=', $date)->paginate(10);
-        return view('admin.transactions.dispatchReport', $this->data);
-    }
+    // public function dispatchReportbydate(int $days)
+    // {
+    //     $this->data['currentAdminMenu'] = 'reports';
+    //     $this->data['currentAdminSubMenu'] = 'dispatch report';
+    //     $this->data['currentSortmenu'] = 'day '.$days;
+    //     $date = \Carbon\Carbon::today()->subDays($days);
+    //     $this->data['transactions'] = Transaction::where('type', 2)->where('created_at', '>=', $date)->paginate(10);
+    //     return view('admin.transactions.dispatchReport', $this->data);
+    // }
 
     public function searchDispatchreport(Request $request)
     {
-        $search = $request->get('search');
-        $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'dispatch report';
-        $this->data['currentSortmenu'] = 'all day';
-        $this->data['transactions'] = Transaction::select('transactions.*')
-                                    ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
-                                    ->where('products.name', 'like', '%' . $search . '%')
-                                    ->paginate(10);
-        
+        $search = $request->search;
+        $days = substr($request->sortmenu,4);
+        if ($days != 'day') {
+            $date = \Carbon\Carbon::today()->subDays($days);
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'dispatch report';
+            $this->data['currentSortmenu'] = $request->sortmenu;
+            $this->data['search'] = $search;
+            $this->data['transactions'] = Transaction::select('transactions.*')
+                                        ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
+                                        ->where('type', 2)
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->where('transactions.created_at', '>=', $date)
+                                        ->paginate(10);
+                                
+        }else{
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'dispatch report';
+            $this->data['currentSortmenu'] = $request->sortmenu;
+            $this->data['search'] = $search;
+            $this->data['transactions'] = Transaction::select('transactions.*')
+                                        ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
+                                        ->where('type', 2)
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->paginate(10);      
+        }        
         return view('admin.transactions.dispatchReport', $this->data);
     }
 
@@ -165,32 +184,56 @@ class TransactionController extends Controller
     {
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'transaction report';
+        $this->data['search'] = '';
         $this->data['currentSortmenu'] = 'all day';
         $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
+        $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
+        $this->data['totalRevenue'] = Order::sum('payment');
         return view('admin.transactions.transactionReport', $this->data);
     }
 
-    public function transactionReportbydate(int $days)
-    {
-        $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'transaction report';
-        $this->data['currentSortmenu'] = 'day '.$days;
-        $date = \Carbon\Carbon::today()->subDays($days);
-        $this->data['transactions'] = Transaction::where('created_at', '>=', $date)->paginate(10);
-        return view('admin.transactions.transactionReport', $this->data);
-    }
+    // public function transactionReportbydate(int $days)
+    // {
+    //     $this->data['currentAdminMenu'] = 'reports';
+    //     $this->data['currentAdminSubMenu'] = 'transaction report';
+    //     $this->data['currentSortmenu'] = 'day '.$days;
+    //     $date = \Carbon\Carbon::today()->subDays($days);
+    //     $this->data['transactions'] = Transaction::where('created_at', '>=', $date)->paginate(10);
+    //     $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
+    //     $this->data['totalRevenue'] = Order::sum('payment');
+    //     return view('admin.transactions.transactionReport', $this->data);
+    // }
 
     public function searchTransactionreport(Request $request)
     {
-        $search = $request->get('search');
-        $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'transaction report';
-        $this->data['currentSortmenu'] = 'all day';
-        $this->data['transactions'] = Transaction::select('transactions.*')
-                                    ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
-                                    ->where('products.name', 'like', '%' . $search . '%')
-                                    ->paginate(10);
-        
+        $search = $request->search;
+        $days = substr($request->sortmenu,4);
+        if ($days != 'day') {
+            $date = \Carbon\Carbon::today()->subDays($days);
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'transaction report';
+            $this->data['currentSortmenu'] = $request->sortmenu;
+            $this->data['search'] = $search;
+            $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
+            $this->data['totalRevenue'] = Order::sum('payment');
+            $this->data['transactions'] = Transaction::select('transactions.*')
+                                        ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->where('transactions.created_at', '>=', $date)
+                                        ->paginate(10);
+                                
+        }else{
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'transaction report';
+            $this->data['currentSortmenu'] = $request->sortmenu;
+            $this->data['search'] = $search;
+            $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
+            $this->data['totalRevenue'] = Order::sum('payment');
+            $this->data['transactions'] = Transaction::select('transactions.*')
+                                        ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->paginate(10);      
+        }        
         return view('admin.transactions.transactionReport', $this->data);
     }
 
@@ -199,6 +242,7 @@ class TransactionController extends Controller
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'purchase report';
         $this->data['currentSortmenu'] = 'all day';
+        $this->data['search'] = '';
         $this->data['restocks'] = RestockBatch::orderBy('product_id', 'DESC')->paginate(10);
         $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
         return view('admin.transactions.purchaseReport', $this->data);
@@ -211,21 +255,65 @@ class TransactionController extends Controller
         $this->data['currentSortmenu'] = 'day '.$days;
         $date = \Carbon\Carbon::today()->subDays($days);
         $this->data['restocks'] = RestockBatch::where('created_at', '>=', $date)->paginate(10);
+        $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
         return view('admin.transactions.purchaseReport', $this->data);
     }
 
     public function searchPurchasereport(Request $request)
     {
-        $search = $request->get('search');
-        $this->data['currentAdminMenu'] = 'reports';
-        $this->data['currentAdminSubMenu'] = 'purchase report';
-        $this->data['currentSortmenu'] = 'all day';
-        $this->data['restocks'] = RestockBatch::select('restock_batches.*')
-                                    ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
-                                    ->where('products.name', 'like', '%' . $search . '%')
-                                    ->paginate(10);
-        
+        $search = $request->search;
+        $days = substr($request->sortmenu,4);
+        if ($days != 'day') {
+            $date = \Carbon\Carbon::today()->subDays($days);
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'purchase report';
+            $this->data['currentSortmenu'] = $request->sortmenu;
+            $this->data['search'] = $search;
+            $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+            $this->data['restocks'] = RestockBatch::select('restock_batches.*')
+                                        ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->where('restock_batches.created_at', '>=', $date)
+                                        ->paginate(10);
+                                
+        }else{
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'transaction report';
+            $this->data['currentSortmenu'] = $request->sortmenu;
+            $this->data['search'] = $search;
+            $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+            $this->data['restocks'] = RestockBatch::select('restock_batches.*')
+                                        ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->paginate(10);      
+        }        
         return view('admin.transactions.purchaseReport', $this->data);
+        // $search = $request->get('search');
+        // $date = $request->get('currentSortmenu');
+        // $this->data['currentAdminMenu'] = 'reports';
+        // $this->data['currentAdminSubMenu'] = 'purchase report';
+        // $this->data['currentSortmenu'] = 'all day';
+        // if ($date == 'all day') {
+        //     $this->data['restocks'] = RestockBatch::select('restock_batches.*')
+        //                             ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+        //                             ->where('products.name', 'like', '%' . $search . '%')
+        //                             ->paginate(10);
+        //     $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+        // }else {
+        //     $this->data['restocks'] = RestockBatch::select('restock_batches.*')
+        //                             ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+        //                             ->where('products.name', 'like', '%' . $search . '%')
+        //                             ->where('created_at', '>=', $date)
+        //                             ->paginate(10);
+        //     $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+        // }
+        // // $this->data['restocks'] = RestockBatch::select('restock_batches.*')
+        // //                             ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+        // //                             ->where('products.name', 'like', '%' . $search . '%')
+        // //                             ->paginate(10);
+        // // $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+        
+        // return view('admin.transactions.purchaseReport', $this->data);
     }
 
     /**
