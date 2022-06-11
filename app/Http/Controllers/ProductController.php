@@ -237,8 +237,9 @@ class ProductController extends Controller
                     ->select('products.*',DB::raw("SUM(amount) AS total"))
                     ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
                     ->groupBy('restock_batches.product_id')
+                    ->having('total', '>', 0)
                     ->orderBy('id', 'ASC')
-                    ->paginate(10);
+                    ->paginate(8);
         return response()->json($this->data);
     }
     public function getProductsByCategory($category_id){
@@ -248,8 +249,9 @@ class ProductController extends Controller
                     ->where('category_id', $category_id)
                     ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
                     ->groupBy('restock_batches.product_id')
+                    ->having('total', '>', 0)
                     ->orderBy('id', 'ASC')
-                    ->paginate(10);
+                    ->paginate(8);
         return response()->json($this->data);
     }
 }

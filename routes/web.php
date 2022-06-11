@@ -34,6 +34,8 @@ Route::middleware(['cors'])->group(function () {
 Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
     function () {
+        Route::get('dashboard', 'DashboardController@index');
+        Route::get('dashboard/{days}', 'DashboardController@indexByDate');
         Route::resource('categories', 'CategoryController');
         Route::get('transactions/searchPurchasereport', 'TransactionController@searchPurchasereport');
         Route::get('transactions/searchTransactionreport', 'TransactionController@searchTransactionreport');

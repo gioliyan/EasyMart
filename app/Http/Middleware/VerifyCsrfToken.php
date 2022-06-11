@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         '/transactions',
         '/order',
         '/statusOrder',
-        '/confirmOrder'
+        '/confirmOrder',
+        '/searchByName'
     ];
 }

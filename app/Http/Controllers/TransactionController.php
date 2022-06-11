@@ -108,6 +108,7 @@ class TransactionController extends Controller
     {
         $search = $request->search;
         $days = substr($request->sortmenu,4);
+        $date = \Carbon\Carbon::today()->subDays($days);
         if ($days != 'day') {
             $date = \Carbon\Carbon::today()->subDays($days);
             $this->data['currentAdminMenu'] = 'reports';
@@ -187,8 +188,9 @@ class TransactionController extends Controller
         $this->data['search'] = '';
         $this->data['currentSortmenu'] = 'all day';
         $this->data['transactions'] = Transaction::orderBy('created_at', 'DESC')->paginate(10);
-        $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
-        $this->data['totalRevenue'] = Order::sum('payment');
+        $this->data['totalExpense'] = Transaction::where('type',1)->sum('margin');
+        $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
+                                    ->sum('payment');
         return view('admin.transactions.transactionReport', $this->data);
     }
 
@@ -214,8 +216,10 @@ class TransactionController extends Controller
             $this->data['currentAdminSubMenu'] = 'transaction report';
             $this->data['currentSortmenu'] = $request->sortmenu;
             $this->data['search'] = $search;
-            $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
-            $this->data['totalRevenue'] = Order::sum('payment');
+            $this->data['totalExpense'] = Transaction::where('type',1)->where('created_at', '>=', $date)->sum('margin');
+            $this->data['totalRevenue'] = Order::where('transaction_status','settlement')
+                                            ->where('updated_at', '>=', $date)                             
+                                            ->sum('payment');
             $this->data['transactions'] = Transaction::select('transactions.*')
                                         ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
                                         ->where('products.name', 'like', '%' . $search . '%')
@@ -227,8 +231,9 @@ class TransactionController extends Controller
             $this->data['currentAdminSubMenu'] = 'transaction report';
             $this->data['currentSortmenu'] = $request->sortmenu;
             $this->data['search'] = $search;
-            $this->data['totalExpense'] = RestockBatch::sum('purchaseprice');
-            $this->data['totalRevenue'] = Order::sum('payment');
+            $this->data['totalExpense'] = Transaction::where('type',1)->sum('margin');
+            $this->data['totalRevenue'] = Order::where('transaction_status','settlement')
+                                        ->sum('payment');
             $this->data['transactions'] = Transaction::select('transactions.*')
                                         ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
                                         ->where('products.name', 'like', '%' . $search . '%')
@@ -244,7 +249,7 @@ class TransactionController extends Controller
         $this->data['currentSortmenu'] = 'all day';
         $this->data['search'] = '';
         $this->data['restocks'] = RestockBatch::orderBy('product_id', 'DESC')->paginate(10);
-        $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+        $this->data['totalRevenue'] = Transaction::where('type',1)->sum('margin');
         return view('admin.transactions.purchaseReport', $this->data);
     }
 
@@ -269,7 +274,7 @@ class TransactionController extends Controller
             $this->data['currentAdminSubMenu'] = 'purchase report';
             $this->data['currentSortmenu'] = $request->sortmenu;
             $this->data['search'] = $search;
-            $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+            $this->data['totalRevenue'] = Transaction::where('type',1)->where('created_at', '>=', $date)->sum('margin');
             $this->data['restocks'] = RestockBatch::select('restock_batches.*')
                                         ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
                                         ->where('products.name', 'like', '%' . $search . '%')
@@ -281,7 +286,7 @@ class TransactionController extends Controller
             $this->data['currentAdminSubMenu'] = 'transaction report';
             $this->data['currentSortmenu'] = $request->sortmenu;
             $this->data['search'] = $search;
-            $this->data['totalRevenue'] = RestockBatch::sum('purchaseprice');
+            $this->data['totalRevenue'] = Transaction::where('type',1)->sum('margin');
             $this->data['restocks'] = RestockBatch::select('restock_batches.*')
                                         ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
                                         ->where('products.name', 'like', '%' . $search . '%')
@@ -338,11 +343,13 @@ class TransactionController extends Controller
         $product_id = $request->product_id;
         $this->data['user_id'] = Auth::user()->id;
         $this->data['product_id'] = $product_id;
-        $this->data['$request->type'] = $request->type;
+        $this->data['type'] = $request->type;
         $this->data['amount'] = $request->amount;
-        $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;
+        // $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;
         $restockBatch = app('App\Http\Controllers\RestockBatchController')->store($request);
         $updateProduct = app('App\Http\Controllers\ProductController')->update($request,Product::find($product_id));
+        $this->data['margin'] =  $request->purchaseprice * $request->amount;
+
         if ($restockBatch && $updateProduct) {
             $this->data['batch_id'] = $restockBatch->id;
             $transaction = Transaction::create($this->data);
@@ -354,8 +361,8 @@ class TransactionController extends Controller
         //     app('App\Http\Controllers\RestockBatchController')->store($this->data);
         //     app('App\Http\Controllers\ProductController')->updateStok($this->data);
         // }
-        return $this->data;
-        // return redirect('admin/transactions');
+        // return $this->data;
+        return redirect('admin/transactions');
     }
 
     public function sellingTransaction($request){
@@ -369,7 +376,7 @@ class TransactionController extends Controller
         //ambil harga beli/kulak sebelumnya
         $purchasePrice = RestockBatch::where('id', '=', $request['batch_id'])->firstOrFail()->purchaseprice;
         //insert total margin
-        $this->data['margin'] = $sellingPrice - $purchasePrice;
+        $this->data['margin'] = ($sellingPrice - $purchasePrice) * $request['storedAmount'];
         $transaction = Transaction::create($this->data);
         
     }

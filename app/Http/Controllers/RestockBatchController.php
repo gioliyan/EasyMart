@@ -51,6 +51,13 @@ class RestockBatchController extends Controller
     {
         //
     }
+    public function showBySearch(Request $keyword){
+        $this->data['restockBatch'] = RestockBatch::select('restock_batches.*')
+                                    ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+                                    ->where('products.name', 'like','%'.$keyword->key.'%')
+                                    ->paginate(10);
+        return $this->data;
+    }
 
     /**
      * Show the form for editing the specified resource.

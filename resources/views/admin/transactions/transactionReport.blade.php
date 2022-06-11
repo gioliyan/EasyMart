@@ -64,6 +64,7 @@
                     <table class="table table-bordered table-stripped">
                         <thead>
                             <th>#ID</th>
+                            <th>Batch ID</th>
                             <th>Produk</th>
                             <th>Jenis</th>
                             <th>Total Harga</th>
@@ -75,6 +76,7 @@
                             @forelse ($transactions as $transaction)
                             <tr>
                                 <td>{{ $transaction->id }}</td>
+                                <td>{{ $transaction->batch_id }}</td>
                                 <td>{{ $transaction->product->name }}</td>
                                 @if($transaction->type == "1")
                                 <td>
