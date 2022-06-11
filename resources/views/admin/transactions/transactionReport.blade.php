@@ -41,15 +41,41 @@
                             </form>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="d-flex col-lg-6 align-items-center">
-                            <h4>Total Pengeluaran:
-                                Rp {{ number_format ($totalExpense , 0 , '.', '.') }}</h4>
+                    <form action="{{ url('admin/transactions/searchTransactionreport') }}">
+                        <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                        <div class="row mb-2">
+                            <div class="d-flex col-lg-6 align-items-center">
+                                <h4>Total Pengeluaran:
+                                    Rp {{ number_format ($totalExpense , 0 , '.', '.') }}</h4>
+                            </div>
+                            <div class="col-6 d-flex justify-content-end mb-1">
+                                <div class="align-items-center d-flex">
+                                    <h5>Cari berdasarkan tanggal</h2>
+                                </div>
+                                <div class="col justify-content-end">
+                                    <input class="date form-control" type="text" name="from">
+                                </div>
+                                <div class="align-items-center d-flex">
+                                    <h5>-</h2>
+                                </div>
+                                <div class="col justify-content-end">
+                                    <input class="date form-control" type="text" name="to">
+                                </div>
+                                <div class="dropdown d-inline-block">
+                                    <button class="btn btn-outline-warning btn-square" type="submit"
+                                        aria-haspopup="true" aria-expanded="false" data-display="static">
+                                        <i class="mdi mdi-calendar-search"></i>
+                                        Cari
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex flex-row-reverse col-lg-6">
+                    </form>
+                    <div class="row flex-row-reverse">
+                        <div class="d-flex flex-row-reverse col-lg-7 pr-0">
                             <div class="col-md-10">
                                 <form action="{{ url('admin/transactions/searchTransactionreport') }}">
-                                    <div class="input-group mb-3">
+                                    <div class="input-group">
                                         <input type="hidden" class="form-control" name="sortmenu"
                                             value="{{$currentSortmenu }}">
                                         <input type="text" class="form-control" placeholder="Search.." name="search"
@@ -60,6 +86,7 @@
                             </div>
                         </div>
                     </div>
+
                     @include('admin.partials.flash')
                     <table class="table table-bordered table-stripped">
                         <thead>

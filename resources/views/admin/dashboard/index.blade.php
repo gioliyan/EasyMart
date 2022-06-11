@@ -21,6 +21,31 @@
                 </div>
             </div>
         </div>
+        <form action="{{ url('admin/dashboard/byRange') }}">
+            <div class="row justify-content-end ">
+                <div class="col-6 d-flex justify-content-end mb-1">
+                    <div class="align-items-center d-flex">
+                        <h5>Cari berdasarkan tanggal</h2>
+                    </div>
+                    <div class="col justify-content-end">
+                        <input class="date form-control" type="text" name="from">
+                    </div>
+                    <div class="align-items-center d-flex">
+                        <h5>-</h2>
+                    </div>
+                    <div class="col justify-content-end">
+                        <input class="date form-control" type="text" name="to">
+                    </div>
+                    <div class="dropdown d-inline-block">
+                        <button class="btn btn-outline-warning btn-square" type="submit" aria-haspopup="true"
+                            aria-expanded="false" data-display="static">
+                            <i class="mdi mdi-calendar-search"></i>
+                            Cari
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
         <div class="row">
             <div class="col-xl-3 col-sm-6">
                 <div class="card card-mini mb-4">
@@ -167,7 +192,8 @@
                                 <tr>
                                     <td class="text-dark">{{$inventory->name}}</td>
                                     <td class="text-center">{{$inventory->total}}</td>
-                                    <td class="text-right">{{round($inventory->total/$inventories->sum('total') *100)}}%
+                                    <td class="text-right">
+                                        {{round($inventory->total/$inventories->sum('total') *100)}}%
                                     </td>
                                 </tr>
                                 @endforeach

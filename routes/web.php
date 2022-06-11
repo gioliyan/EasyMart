@@ -35,6 +35,7 @@ Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
     function () {
         Route::get('dashboard', 'DashboardController@index');
+        Route::get('dashboard/byRange', 'DashboardController@indexByRange');
         Route::get('dashboard/{days}', 'DashboardController@indexByDate');
         Route::resource('categories', 'CategoryController');
         Route::get('transactions/searchPurchasereport', 'TransactionController@searchPurchasereport');
