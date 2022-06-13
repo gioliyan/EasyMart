@@ -39,7 +39,7 @@
                                 <td>Rp {{ number_format ($order->total , 0 , '.', '.') }}</td>
                                 <td>{{ date('Y-m-d', strtotime($order->updated_at) )}}</td>
                                 <td>{{ date('H:i', strtotime($order->updated_at) )}}</td>
-                                <td>{{ $order->token }}</td>
+                                <td>{{ $order->payment_type }}</td>
                             </tr>
                             @empty
                             <tr>

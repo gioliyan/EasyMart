@@ -148,7 +148,7 @@ class OrderController extends Controller
     public function requestPayment(Order $order){
 
         // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = 'SB-Mid-server-il7RmP0ASZ_1g70GlP5SCg6T';
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-dx5ECjkef78uZ5c8_pl2_pGU';
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
@@ -172,55 +172,59 @@ class OrderController extends Controller
         Order::where('no_order', $order->no_order)->first()->update(['token' => $snapToken]);        
     }
 
+
+    public function jajalEncrypt(Request $request){
+        $order = Order::where('no_order', $request->order_id)->first();
+        $orderEncryption = hash("sha512",$order->no_order.'200'.$order->total.'.00'.'SB-Mid-server-dx5ECjkef78uZ5c8_pl2_pGU');
+        return $orderEncryption;
+    }
     public function confirmOrder(Request $request){
-        $order = Order::where('no_order', $request['order_id'])->first();
-        // $orderEncryption = sha512($order->no_order+'200'+$order->total+serverkey);
-
-        // if ($request['signature_key'] == $orderEncryption) {
-            $order->transaction_status = $request['transaction_status'];
-            $order->settlement_time = $request['settlement_time'];
-            $order->payment_type = $request['payment_type'];
-            $order->save();
-        // }
-
-        //ambil query daftar product dari order 
-        $orders = OrderDetail::where('order_id', $order->id)->get();
-        
-        foreach ($orders as $order) {
-            $requestedAmount = $order->qty;
-            while ($requestedAmount > 0) {
-                $storedAmount = 0;
-                //ambil data batch teratas dengan sisa stok > 0
-                $batch = RestockBatch::where('product_id', $order->product_id)
-                        ->where('amount','>',0)
-                        ->orderBy('id', 'asc')
-                        ->first();
-                $remainingStockAmount = $batch->amount;
-                //cek apabila jumlah produk yang diminta < stok yang dimiliki
-                if ($remainingStockAmount > $requestedAmount) {
-                    $storedAmount = $requestedAmount;
-                    $remainingStockAmount = $remainingStockAmount - $requestedAmount;
-                    $requestedAmount = 0;
+        $orderPending = Order::where('no_order', $request['order_id'])->first();
+        $orderEncryption = hash("sha512",$orderPending->no_order.'200'.$orderPending->total.'.00'.'SB-Mid-server-dx5ECjkef78uZ5c8_pl2_pGU');
+        if ($request->signature_key == $orderEncryption 
+            && $orderPending->transaction_status == 'pending' 
+            && $request->transaction_status == 'settlement') {
+            $orderPending->transaction_status = $request['transaction_status'];
+            $orderPending->settlement_time = $request['settlement_time'];
+            $orderPending->payment_type = $request['payment_type'];
+            $orderPending->save();
+            //ambil query daftar product dari order 
+            $orders = OrderDetail::where('order_id', $orderPending->id)->get();
+            foreach ($orders as $order) {
+                $requestedAmount = $order->qty;
+                while ($requestedAmount > 0) {
+                    $storedAmount = 0;
+                    //ambil data batch teratas dengan sisa stok > 0
+                    $batch = RestockBatch::where('product_id', $order->product_id)
+                            ->where('amount','>',0)
+                            ->orderBy('id', 'asc')
+                            ->first();
+                    $remainingStockAmount = $batch->amount;
+                    //cek apabila jumlah produk yang diminta < stok yang dimiliki
+                    if ($remainingStockAmount > $requestedAmount) {
+                        $storedAmount = $requestedAmount;
+                        $remainingStockAmount = $remainingStockAmount - $requestedAmount;
+                        $requestedAmount = 0;
+                    }
+                    //cek apabila jumlah produk yang diminta > stok yang dimiliki
+                    else{
+                        $storedAmount = $remainingStockAmount;
+                        $requestedAmount = $requestedAmount - $remainingStockAmount;
+                        $remainingStockAmount = 0;
+                    }
+                    //simpan perubahan jumlah stok pada table Restock Batch
+                    $batch->amount = $remainingStockAmount;
+                    $batch->save();
+                    //tambahkan data transaksi penjualan
+                    $this->data['product_id'] = $order->product_id;
+                    $this->data['batch_id'] = $batch->id;
+                    $this->data['storedAmount'] = $storedAmount;
+                    app('App\Http\Controllers\TransactionController')->sellingTransaction($this->data);
                 }
-                //cek apabila jumlah produk yang diminta > stok yang dimiliki
-                else{
-                    $storedAmount = $remainingStockAmount;
-                    $requestedAmount = $requestedAmount - $remainingStockAmount;
-                    $remainingStockAmount = 0;
-                }
-                //simpan perubahan jumlah stok pada table Restock Batch
-                $batch->amount = $remainingStockAmount;
-                $batch->save();
-                //tambahkan data transaksi penjualan
-                $this->data['product_id'] = $order->product_id;
-                $this->data['batch_id'] = $batch->id;
-                $this->data['storedAmount'] = $storedAmount;
-                app('App\Http\Controllers\TransactionController')->sellingTransaction($this->data);
+                // return $batch;
             }
-            // return $batch;
         }
-        return $orders;
-        
+        return $orderPending;
     }
 
     /**

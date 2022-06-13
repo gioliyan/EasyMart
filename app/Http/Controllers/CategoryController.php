@@ -26,7 +26,7 @@ class CategoryController extends Controller
     
     public function index()
     {
-        $this->data['categories'] = Category::orderBy('name', 'ASC')->paginate(10);
+        $this->data['categories'] = Category::where('isActive','=',1)->orderBy('name', 'ASC')->paginate(10);
         return view('admin.categories.index', $this->data);
     }
 
@@ -50,9 +50,18 @@ class CategoryController extends Controller
     {
         $params = $request->except('_token');
 
-        if (Category::create($params)) {
-            Session::flash('success', 'Category has been saved');
+        try {
+            Category::create($params);
+            Session::flash('success', 'Kategori berhasil disimpan');
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Kategori tidak bisa disimpan, terdapat duplikasi nama kategori');
         }
+
+        // if (Category::create($params)) {
+        //     Session::flash('success', 'Category has been saved');
+        // }else{
+        //     Session::flash('error', 'Category has not been saved');
+        // }
         return redirect('admin/categories');
     }
 
@@ -94,8 +103,11 @@ class CategoryController extends Controller
     {
         $params = $request->except('_token');
 
-        if ($category->update($params)) {
-            Session::flash('success', 'Category has been updated.');
+        try {
+            $category->update($params);
+            Session::flash('success', 'Kategori berhasil diperbarui');
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Kategori tidak bisa diperbarui, terdapat duplikasi nama kategori');
         }
 
         return redirect('admin/categories');
@@ -109,10 +121,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if ($category->delete()) {
-            Session::flash('success', 'Category has been deleted');
+        $category->isActive = 0;
+        if ($category->save()) {
+            Session::flash('success', 'Kategori berhasil dihapus');
         }
-
         return redirect('admin/categories');
     }
 }

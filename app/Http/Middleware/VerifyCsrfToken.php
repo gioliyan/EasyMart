@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
         '/order',
         '/statusOrder',
         '/confirmOrder',
-        '/searchByName'
+        '/searchByName',
+        '/jajalEncrypt',
     ];
 }

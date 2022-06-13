@@ -356,28 +356,25 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        $product_id = $request->product_id;
-        $this->data['user_id'] = Auth::user()->id;
-        $this->data['product_id'] = $product_id;
-        $this->data['type'] = $request->type;
-        $this->data['amount'] = $request->amount;
-        // $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;
-        $restockBatch = app('App\Http\Controllers\RestockBatchController')->store($request);
-        $updateProduct = app('App\Http\Controllers\ProductController')->update($request,Product::find($product_id));
-        $this->data['margin'] =  $request->purchaseprice * $request->amount;
-
-        if ($restockBatch && $updateProduct) {
-            $this->data['batch_id'] = $restockBatch->id;
-            $transaction = Transaction::create($this->data);
+        if ($request->amount > 0) {
+            $product_id = $request->product_id;
+            $this->data['user_id'] = Auth::user()->id;
+            $this->data['product_id'] = $product_id;
+            $this->data['type'] = $request->type;
+            $this->data['amount'] = $request->amount;
+            // $this->data['initial_amount'] = Product::where('id', '=', $product_id)->firstOrFail()->stock;
+            $restockBatch = app('App\Http\Controllers\RestockBatchController')->store($request);
+            $updateProduct = app('App\Http\Controllers\ProductController')->update($request,Product::find($product_id));
+            $this->data['margin'] =  $request->purchaseprice * $request->amount;
+    
+            if ($restockBatch && $updateProduct) {
+                $this->data['batch_id'] = $restockBatch->id;
+                $transaction = Transaction::create($this->data);
+            }
+            Session::flash('success', 'Data restock berhasil ditambahkan');
+        }else{
+            Session::flash('error', 'Data restock tidak dapat disimpan, input stok harus lebih dari 0');
         }
-        
-        // if ($transaction) {
-        //     $this->data['price'] = $request->amount;
-        //     $this->data['transaction_id'] = $transaction->id;
-        //     app('App\Http\Controllers\RestockBatchController')->store($this->data);
-        //     app('App\Http\Controllers\ProductController')->updateStok($this->data);
-        // }
-        // return $this->data;
         return redirect('admin/transactions');
     }
 

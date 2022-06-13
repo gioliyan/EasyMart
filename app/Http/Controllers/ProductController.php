@@ -33,7 +33,7 @@ class ProductController extends Controller
     public function index()
     {
         $this->data['currentAdminSubMenu'] = 'manage';
-        $this->data['products'] = Product::orderBy('name', 'ASC')->paginate(10);
+        $this->data['products'] = Product::where('isActive','=','1')->orderBy('name', 'ASC')->paginate(10);
 
         return view('admin.products.index', $this->data);
     }
@@ -54,7 +54,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::pluck('name', 'id');
+        $categories = Category::where('isActive','=','1')->pluck('name', 'id');
 
         $this->data['categories'] = $categories;
         $this->data['product'] = null;
@@ -73,17 +73,19 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $params = $request->except('_token');
-        $product = Product::create($params);
-        if ($product) {
-            Session::flash('success', 'Product has been saved');
-            $request->request->add(['amount' => '0']);
-            $request->request->add(['product_id' => $product->id]);
-            app('App\Http\Controllers\RestockBatchController')->store($request);
-        }else {
-            Session::flash('error', 'Product could not be saved');
+        try {
+            $product = Product::create($params);
+            if ($product) {
+                Session::flash('success', 'Product has been saved');
+                $request->request->add(['amount' => '0']);
+                $request->request->add(['product_id' => $product->id]);
+                app('App\Http\Controllers\RestockBatchController')->storeInit($request);
+            }
+            return redirect('admin/products/'.$product->id.'/images');  
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Data produk tidak dapat disimpan, silahkan cek nama produk');
+            return redirect('admin/products');
         }
-
-        return redirect('admin/products');
     }
 
     /**
@@ -131,7 +133,7 @@ class ProductController extends Controller
         $params = $request->except('_token');
 
         if ($product->update($params)) {
-            Session::flash('success', 'Product updated successfully');
+            Session::flash('success', 'Data produk berhasil diperbarui');
         }
 
         return redirect('admin/products');
@@ -158,7 +160,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if ($product->delete()) {
+        $product->isActive = 0;
+        if ($product->save()) {
             Session::flash('success', 'Produk berhasil dihapus');
         }
 
@@ -225,28 +228,30 @@ class ProductController extends Controller
         $image = ProductImage::findOrFail($id);
 
         if($image->delete()){
-            Session::flash('success', 'Image has been deleted');
+            Session::flash('success', 'Berkas gambar berhasil dihapus');
         }
 
         return redirect('admin/products/' . $image->product->id . '/images');
     }
 
     public function getAllProducts(){
-        $this->data['categories'] = Category::orderBy('name', 'ASC')->get();
+        $this->data['categories'] = Category::where('isActive', '=', 1)->orderBy('name', 'ASC')->get();
         $this->data['products'] = Product::with('productImages','category')
                     ->select('products.*',DB::raw("SUM(amount) AS total"))
                     ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
                     ->groupBy('restock_batches.product_id')
                     ->having('total', '>', 0)
+                    ->where('products.isActive', '=', 1)
                     ->orderBy('id', 'ASC')
                     ->paginate(8);
         return response()->json($this->data);
     }
     public function getProductsByCategory($category_id){
-        $this->data['categories'] = Category::orderBy('name', 'ASC')->get();
+        $this->data['categories'] = Category::where('isActive', '=', 1)->orderBy('name', 'ASC')->get();
         $this->data['products'] = Product::with('productImages','category')
                     ->select('products.*',DB::raw("SUM(amount) AS total"))
                     ->where('category_id', $category_id)
+                    ->where('products.isActive', '=', 1)
                     ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
                     ->groupBy('restock_batches.product_id')
                     ->having('total', '>', 0)

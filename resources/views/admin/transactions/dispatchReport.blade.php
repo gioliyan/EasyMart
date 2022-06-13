@@ -52,6 +52,7 @@
                     <table class="table table-bordered table-stripped">
                         <thead>
                             <th>#ID</th>
+                            <th>BatchID</th>
                             <th>Produk</th>
                             <th>Toal Harga</th>
                             <th>Jumlah</th>
@@ -62,6 +63,7 @@
                             @forelse ($transactions as $transaction)
                             <tr>
                                 <td>{{ $transaction->id }}</td>
+                                <td>{{ $transaction->batch_id }}</td>
                                 <td>{{ $transaction->product->name }}</td>
                                 <td>Rp
                                     {{ number_format ($transaction->amount * $transaction->product->sellingprice , 0 , '.', '.') }}
