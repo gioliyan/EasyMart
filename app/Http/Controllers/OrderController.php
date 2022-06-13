@@ -98,11 +98,11 @@ class OrderController extends Controller
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'selling report';
         $this->data['currentSortmenu'] = 'all day';
+        $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
+                            ->sum('payment');
         $this->data['orders'] = Order::where('transaction_status', 'settlement')
                             ->orderBy('updated_at', 'DESC')
                             ->paginate(10);
-        $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
-                            ->sum('payment');
         return view('admin.transactions.sellingReport', $this->data);
     }
 
@@ -123,26 +123,27 @@ class OrderController extends Controller
 
     public function searchSellingreport(Request $request)
     {
-        $search = $request->get('search');
+        $search = $request->search;
+        $days = substr($request->sortmenu,4);
+        $from = date($request->from);
+        $to = date($request->to);
         $this->data['currentAdminMenu'] = 'reports';
         $this->data['currentAdminSubMenu'] = 'selling report';
         $this->data['currentSortmenu'] = 'all day';
-        $this->data['orders'] = Order::where('transaction_status', 'settlement')
-                            ->where('updated_at', '>=', $date)
-                            ->orderBy('updated_at', 'DESC')
-                            ->paginate(10);
         $this->data['totalRevenue'] = Order::where('transaction_status', 'settlement')
-                            ->where('updated_at', '>=', $date)
-                            ->sum('payment');
-
+                                ->whereBetween('updated_at', [$from, $to])
+                                ->sum('payment');
+        $this->data['orders'] = Order::where('transaction_status', 'settlement')
+                                ->whereBetween('updated_at', [$from, $to])
+                                ->orderBy('updated_at', 'DESC')
+                                ->paginate(10);
         // $this->data['products'] = Product::with('productImages','category')
         //                             ->select('products.*',DB::raw("SUM(amount) AS total"))
         //                             ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
         //                             ->groupBy('restock_batches.product_id')
         //                             ->where('name', 'like', '%' . $search . '%')
         //                             ->paginate(10);
-        
-        return view('admin.transactions.sellingReport', $this->data);
+        return view('admin.transactions.sellingReport', $this->data);    
     }
 
     public function requestPayment(Order $order){
