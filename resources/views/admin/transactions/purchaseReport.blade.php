@@ -41,6 +41,32 @@
                             </form>
                         </div>
                     </div>
+                    <form action="{{ url('admin/transactions/searchPurchasereport') }}">
+                        <input type="hidden" class="form-control" name="search" value="{{$search}}">
+                        <div class="row mb-2 d-flex flex-row-reverse">
+                            <div class="col-6 d-flex justify-content-end mb-1">
+                                <div class="align-items-center d-flex">
+                                    <h5>Cari berdasarkan tanggal</h2>
+                                </div>
+                                <div class="col justify-content-end">
+                                    <input class="date form-control" type="text" name="from">
+                                </div>
+                                <div class="align-items-center d-flex">
+                                    <h5>-</h2>
+                                </div>
+                                <div class="col justify-content-end">
+                                    <input class="date form-control" type="text" name="to">
+                                </div>
+                                <div class="dropdown d-inline-block">
+                                    <button class="btn btn-outline-warning btn-square" type="submit"
+                                        aria-haspopup="true" aria-expanded="false" data-display="static">
+                                        <i class="mdi mdi-calendar-search"></i>
+                                        Cari
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <div class="row flex-row-reverse">
                         <div class="col-md-5">
                             <form action="{{ url('admin/transactions/searchPurchasereport') }}">

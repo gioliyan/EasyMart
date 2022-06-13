@@ -108,8 +108,20 @@ class TransactionController extends Controller
     {
         $search = $request->search;
         $days = substr($request->sortmenu,4);
-        $date = \Carbon\Carbon::today()->subDays($days);
-        if ($days != 'day') {
+        if ($request->from && $request->to) {
+            $from = date($request->from);
+            $to = date($request->to);
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'dispatch report';
+            $this->data['currentSortmenu'] = 'all day';
+            $this->data['search'] = $search;
+            $this->data['transactions'] = Transaction::select('transactions.*')
+                                        ->leftJoin('products', 'transactions.product_id', '=', 'products.id')
+                                        ->where('type', 2)
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->whereBetween('transactions.created_at', [$from, $to])
+                                        ->paginate(10);
+        }else if ($days != 'day') {
             $date = \Carbon\Carbon::today()->subDays($days);
             $this->data['currentAdminMenu'] = 'reports';
             $this->data['currentAdminSubMenu'] = 'dispatch report';
@@ -284,7 +296,20 @@ class TransactionController extends Controller
     {
         $search = $request->search;
         $days = substr($request->sortmenu,4);
-        if ($days != 'day') {
+        if ($request->from && $request->to) {
+            $from = date($request->from);
+            $to = date($request->to);
+            $this->data['currentAdminMenu'] = 'reports';
+            $this->data['currentAdminSubMenu'] = 'purchase report';
+            $this->data['currentSortmenu'] = 'all day';
+            $this->data['search'] = $search;
+            $this->data['totalRevenue'] = Transaction::where('type',1)->whereBetween('created_at', [$from, $to])->sum('margin');
+            $this->data['restocks'] = RestockBatch::select('restock_batches.*')
+                                        ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+                                        ->where('products.name', 'like', '%' . $search . '%')
+                                        ->whereBetween('restock_batches.created_at', [$from, $to])
+                                        ->paginate(10);
+        }else if($days != 'day'){
             $date = \Carbon\Carbon::today()->subDays($days);
             $this->data['currentAdminMenu'] = 'reports';
             $this->data['currentAdminSubMenu'] = 'purchase report';
@@ -296,10 +321,9 @@ class TransactionController extends Controller
                                         ->where('products.name', 'like', '%' . $search . '%')
                                         ->where('restock_batches.created_at', '>=', $date)
                                         ->paginate(10);
-                                
         }else{
             $this->data['currentAdminMenu'] = 'reports';
-            $this->data['currentAdminSubMenu'] = 'transaction report';
+            $this->data['currentAdminSubMenu'] = 'purchase report';
             $this->data['currentSortmenu'] = $request->sortmenu;
             $this->data['search'] = $search;
             $this->data['totalRevenue'] = Transaction::where('type',1)->sum('margin');
