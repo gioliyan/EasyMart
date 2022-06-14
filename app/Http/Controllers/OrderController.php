@@ -184,8 +184,8 @@ class OrderController extends Controller
         $orderEncryption = hash("sha512",$orderPending->no_order.'200'.$orderPending->total.'.00'.'SB-Mid-server-dx5ECjkef78uZ5c8_pl2_pGU');
         if ($request->signature_key == $orderEncryption 
             && $orderPending->transaction_status == 'pending' 
-            && $request->transaction_status == 'settlement') {
-            $orderPending->transaction_status = $request['transaction_status'];
+            && ($request->transaction_status == 'settlement' || $request->transaction_status == 'capture')) {
+            $orderPending->transaction_status = 'settlement';
             $orderPending->settlement_time = $request['settlement_time'];
             $orderPending->payment_type = $request['payment_type'];
             $orderPending->save();
