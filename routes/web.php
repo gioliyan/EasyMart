@@ -13,13 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(
+    [
+        'middleware' => 'auth'
+    ],
+    function(){
+        Route::get('/', 'DashboardController@index');
+        Route::get('/home', 'DashboardController@index')->name('home');
+    }
+);
 Route::get('/products', 'ProductController@getAllProducts');
 Route::get('/products/category/{category_id}', 'ProductController@getProductsByCategory');
 
@@ -29,7 +36,6 @@ Route::middleware(['cors'])->group(function () {
     Route::post('/order', 'OrderController@showNota');
     Route::post('/statusOrder', 'OrderController@getOrderStatus');
 });
-
 
 Route::group(
     ['prefix' => 'admin', 'middleware' => ['auth']],
