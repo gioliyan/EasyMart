@@ -165,8 +165,8 @@ class OrderController extends Controller
             'customer_details' => array(
                 'first_name' => 'Fumiko',
                 'last_name' => 'Vape Store',
-                'email' => 'chrisdionisius@gmail.com',
-                'phone' => '088235906292',
+                'email' => 'fumikovape@gmail.com',
+                'phone' => '+62 896-8327-7860',
             ),
         );
         $snapToken = \Midtrans\Snap::getSnapToken($params);
