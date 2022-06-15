@@ -57,7 +57,7 @@
                             <th>Total</th>
                             <th>Tanggal</th>
                             <th>Jam</th>
-                            <th>Token</th>
+                            <th>Metode Pembayaran</th>
                         </thead>
                         <tbody>
                             @forelse ($orders as $order)
