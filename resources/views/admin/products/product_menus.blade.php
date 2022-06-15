@@ -5,9 +5,7 @@
     <div class="card-body">
         <nav class="nav flex-column">
             <a class="nav-link" href="{{ url('admin/products/'. $productID .'/edit') }}">Detail Product</a>
-            @if (!empty($product))
             <a class="nav-link" href="{{ url('admin/products/'. $productID .'/images') }}">Product Image</a>
-            @endif
         </nav>
     </div>
 </div>
