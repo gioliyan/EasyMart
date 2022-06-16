@@ -22,6 +22,10 @@
     <link id="sleek-css" rel="stylesheet" href="{{ URL::asset('admin/assets/css/sleek.css') }}" />
     <!-- FAVICON -->
     <link href="{{ URL::asset('admin/assets/img/favicon.png') }}" rel="shortcut icon" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
+        rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
     <script src="{{ URL::asset('admin/assets/plugins/nprogress/nprogress.js') }}"></script>
     @livewireStyles
 </head>
@@ -45,7 +49,7 @@
             @include('admin.partials.footer')
         </div>
     </div>
-    <script src="{{ URL::asset('admin/assets/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- <script src="{{ URL::asset('admin/assets/plugins/jquery/jquery.min.js') }}"></script> -->
     <script src="{{ URL::asset('admin/assets/plugins/slimscrollbar/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/plugins/jekyll-search.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/plugins/charts/Chart.min.js') }}"></script>
@@ -55,6 +59,11 @@
     <script src="{{ URL::asset('admin/assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/plugins/toastr/toastr.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/sleek.bundle.js') }}"></script>
+    <script type="text/javascript">
+    $('.date').datepicker({
+        format: 'yyyy-mm-dd',
+    });
+    </script>
     <script>
     $(".delete").on("submit", function() {
         return confirm("Do you want to remove this?");

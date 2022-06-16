@@ -9,6 +9,16 @@
                     <h2>Product</h2>
                 </div>
                 <div class="card-body">
+                <div class="row flex-row-reverse">
+                    <div class="col-md-5">
+                        <form action="{{ url('admin/products/search') }}">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Search.." name="search" value="{{ request('search') }}">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                     @include('admin.partials.flash')
                     <table class="table table-bordered table-stripped">
                         <thead>

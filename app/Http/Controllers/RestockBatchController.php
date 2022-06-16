@@ -36,6 +36,14 @@ class RestockBatchController extends Controller
     public function store(Request $request)
     {
         $params = $request->except('_token');
+        if ($request->amount > 0) {
+            $restockBatch = RestockBatch::create($params);
+        }
+        return $restockBatch;
+    }
+    public function storeInit(Request $request)
+    {
+        $params = $request->except('_token');
 
         $restockBatch = RestockBatch::create($params);
         return $restockBatch;
@@ -50,6 +58,13 @@ class RestockBatchController extends Controller
     public function show(RestockBatch $restockBatch)
     {
         //
+    }
+    public function showBySearch(Request $keyword){
+        $this->data['restockBatch'] = RestockBatch::select('restock_batches.*')
+                                    ->leftJoin('products', 'restock_batches.product_id', '=', 'products.id')
+                                    ->where('products.name', 'like','%'.$keyword->key.'%')
+                                    ->paginate(10);
+        return $this->data;
     }
 
     /**

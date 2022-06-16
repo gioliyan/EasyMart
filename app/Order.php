@@ -9,7 +9,6 @@ class Order extends Model
     protected $fillable = [
         'no_order',
         'total',
-        'transaction_id',
         'payment',
         'change',
         'phone_number',
