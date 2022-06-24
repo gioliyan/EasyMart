@@ -206,6 +206,46 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-4 col-lg-6 col-12">
+                <!-- Top Sell Table -->
+                <div class="card card-table-border-none">
+                    <div class="card-header justify-content-between">
+                        <h2>Dead Stocks</h2>
+                        <div>
+                            <button class="text-black-50 mr-2 font-size-20"><i class="mdi mdi-cached"></i></button>
+                            <div class="dropdown show d-inline-block widget-dropdown">
+                                <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdown-units"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    data-display="static"></a>
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-units">
+                                    <li class="dropdown-item"><a href="#">Action</a></li>
+                                    <li class="dropdown-item"><a href="#">Another action</a></li>
+                                    <li class="dropdown-item"><a href="#">Something else here</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body py-0 compact-units" data-simplebar style="height: 384px;">
+                        <table class="table ">
+                            <tbody>
+                                @foreach($deadStocks as $deadStock)
+                                <tr>
+                                    <td class="text-dark"><a
+                                            href="{{ url('admin/products/'. $deadStock->id .'/edit') }}">{{$deadStock->name}}</a>
+                                    </td>
+                                    <td class="text-dark">{{$deadStock->total}}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="card-footer bg-white py-4">
+                        <a href="#" class="btn-link py-3 text-uppercase">View Report</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

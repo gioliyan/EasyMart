@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Order;
+use App\OrderDetail;
 use App\Product;
 use App\RestockBatch;
 use DB;
@@ -18,6 +19,37 @@ class DashboardController extends Controller
         parent::__construct();
         $this->data['currentAdminMenu'] = 'dashboard';
         $this->data['currentAdminSubMenu'] = 'dashboard';
+        // $this->data['deadStocksA'] = Product::select('products.*',DB::raw("SUM(restock_batches.amount) AS total"))
+        //                         ->leftJoin('transactions', 'products.id', '=', 'transactions.product_id')
+        //                         ->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+        //                         ->WhereNull('transactions.product_id')
+        //                         ->where('products.created_at', '<=', date('Y-m-d', strtotime('1 day ago')))
+        //                         ->where('products.isActive', '=', 1)
+        //                         ->groupBy('restock_batches.product_id')
+        //                         ->orderBy('total', 'desc');
+        // $this->data['deadStocksB'] = Product::select('products.*',DB::raw("SUM(transactions.amount) AS total"))
+        //                         ->leftJoin('transactions', 'products.id', '=', 'transactions.product_id')
+        //                         ->where('products.created_at', '<=', date('Y-m-d', strtotime('1 day ago')))
+        //                         ->where('products.isActive', '=', 1)
+        //                         ->where('transactions.type', '=', 2)
+        //                         ->groupBy('transactions.product_id')
+        //                         ->having('total','<','2')
+        //                         ->orderBy('total', 'desc');
+        // $this->data['deadStocks'] = $this->data['deadStocksA']->union($this->data['deadStocksB'])->paginate(5);
+        
+        $this->data['emptyOrder'] = OrderDetail::select('order_details.*')
+                                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                                    ->where('orders.transaction_status', '=', 'settlement');
+        $this->data['deadStocks'] = Product::select("products.*",DB::raw("SUM(restock_batches.amount) AS total"))
+                                ->leftJoinSub($this->data['emptyOrder'],'odj',function($join){
+                                    $join->on('products.id', '=', 'odj.product_id');
+                                })->leftJoin('restock_batches', 'products.id', '=', 'restock_batches.product_id')
+                                ->WhereNull('odj.product_id')
+                                ->where('products.isActive', '=', 1)
+                                ->where('products.created_at', '<=', date('Y-m-d', strtotime('1 month ago')))
+                                ->groupBy('restock_batches.product_id')
+                                ->having('total','>',0)
+                                ->paginate(5);
     }
 
     function index()
@@ -46,7 +78,7 @@ class DashboardController extends Controller
                                 ->orderBy('total', 'desc')
                                 ->take(5)
                                 ->get();
-                                
+        
         return view('admin.dashboard.index',$this->data);
     }
     function indexByDate($days)

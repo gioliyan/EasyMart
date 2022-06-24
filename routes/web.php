@@ -59,11 +59,11 @@ Route::group(
         Route::get('transactions/sellingReport', 'OrderController@sellingReport');
         Route::get('transactions/sellingReportByDate/{days}', 'OrderController@sellingReportByDate');
         Route::get('transactions/stockReport', 'TransactionController@stockReport');
-        
         Route::get('products/search', 'ProductController@searchProduct');
         Route::get('transactions/input/{product_id}', 'TransactionController@create');
         Route::resource('transactions', 'TransactionController');
         Route::resource('products', 'ProductController');
+        Route::resource('orders', 'OrderController');
         Route::get('products/{product_id}/images', 'ProductController@images');
         Route::get('products/{product_id}/add-image', 'ProductController@add_image');
         Route::post('products/images/{product_id}', 'ProductController@upload_image');

@@ -65,7 +65,10 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-
+        $this->data['currentAdminMenu'] = 'reports';
+        $this->data['currentAdminSubMenu'] = 'selling report';
+        $this->data['order'] = Order::find($order->id);
+        return view('admin.transactions.orderDetail', $this->data);
     }
 
     public function showNota(Request $request)

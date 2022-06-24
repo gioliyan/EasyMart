@@ -62,7 +62,7 @@
                         <tbody>
                             @forelse ($orders as $order)
                             <tr>
-                                <td>{{ $order->no_order }}</td>
+                                <td><a href="{{ url('admin/orders/'. $order->id) }}">{{ $order->no_order }}</a></td>
                                 <td>Rp {{ number_format ($order->total , 0 , '.', '.') }}</td>
                                 <td>{{ date('Y-m-d', strtotime($order->updated_at) )}}</td>
                                 <td>{{ date('H:i', strtotime($order->updated_at) )}}</td>
